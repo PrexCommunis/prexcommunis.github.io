@@ -157,7 +157,7 @@ main {
 .rubric {
     color: var(--rubric-color);
     font-style: italic;
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     margin: 15px 0;
 }
 
