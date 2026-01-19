@@ -11,8 +11,9 @@
         <meta http-equiv="Expires" content="0" />
         <title>Common Prayer - Daily Office</title>
         <script>
-            // Apply theme immediately to prevent flash
+            // Apply theme and office selection immediately to prevent flash
             (function () {
+                // Theme
                 const savedTheme = localStorage.getItem("theme");
                 const prefersDark = window.matchMedia(
                     "(prefers-color-scheme: dark)",
@@ -23,6 +24,26 @@
                 ) {
                     document.documentElement.classList.add("dark-mode");
                 }
+
+                // Determine appropriate office based on time
+                const hour = new Date().getHours();
+                let office;
+                if (hour >= 5 && hour < 11) {
+                    office = "morning";
+                } else if (hour >= 11 && hour < 14) {
+                    office = "midday";
+                } else if (hour >= 14 && hour < 20) {
+                    office = "evening";
+                } else {
+                    office = "compline";
+                }
+                document.documentElement.setAttribute(
+                    "data-initial-office",
+                    office,
+                );
+
+                // Hide content until fonts load to prevent text reflow
+                document.documentElement.classList.add("fonts-loading");
             })();
         </script>
         <link rel="stylesheet" href="styles.css" />
@@ -83,7 +104,7 @@
             </header>
 
             <nav class="main-nav">
-                <button class="nav-btn active" data-office="morning">
+                <button class="nav-btn" data-office="morning">
                     Morning Prayer
                 </button>
                 <button class="nav-btn" data-office="midday">

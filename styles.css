@@ -24,6 +24,11 @@ body.dark-mode {
     --page-color: #222222;
 }
 
+/* Hide content until fonts are loaded to prevent text reflow */
+html.fonts-loading body {
+    visibility: hidden;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -95,6 +100,16 @@ header h1 {
 }
 
 .nav-btn.active {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+/* Initial office selection before JS loads (prevents flash) */
+html[data-initial-office="morning"] .nav-btn[data-office="morning"],
+html[data-initial-office="midday"] .nav-btn[data-office="midday"],
+html[data-initial-office="evening"] .nav-btn[data-office="evening"],
+html[data-initial-office="compline"] .nav-btn[data-office="compline"] {
     background-color: var(--accent-color);
     color: white;
     border-color: var(--accent-color);

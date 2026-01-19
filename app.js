@@ -868,8 +868,12 @@ function getAppropriateOffice() {
 
 // Initialize the app
 function init() {
-  // Set the appropriate office based on current time
-  currentOffice = getAppropriateOffice();
+  // Use the office already determined by the inline script (to prevent flash)
+  // Fall back to getAppropriateOffice() if not set
+  const initialOffice = document.documentElement.getAttribute(
+    "data-initial-office",
+  );
+  currentOffice = initialOffice || getAppropriateOffice();
 
   updateDate();
   renderPrayer(currentOffice);
@@ -973,4 +977,14 @@ function initDarkMode() {
 document.addEventListener("DOMContentLoaded", () => {
   init();
   initDarkMode();
+
+  // Show content once fonts are loaded (prevents text reflow flash)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      document.documentElement.classList.remove("fonts-loading");
+    });
+  } else {
+    // Fallback for browsers without Font Loading API
+    document.documentElement.classList.remove("fonts-loading");
+  }
 });
