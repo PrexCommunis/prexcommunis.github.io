@@ -338,6 +338,97 @@ body.dark-mode .moon-icon {
     display: none;
 }
 
+/* PWA Install and Notification Prompts */
+.install-prompt,
+.notification-prompt {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--secondary-bg);
+    border-top: 2px solid var(--border-color);
+    box-shadow: 0 -4px 16px var(--shadow);
+    z-index: 999;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.install-prompt-content,
+.notification-prompt-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.install-prompt h3,
+.notification-prompt h3 {
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.install-prompt p,
+.notification-prompt p {
+    font-family: "Roboto", sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.install-prompt-buttons,
+.notification-prompt-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.install-btn,
+.dismiss-btn {
+    padding: 10px 24px;
+    border-radius: 4px;
+    border: none;
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.install-btn {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.install-btn:hover {
+    background-color: var(--text-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.dismiss-btn {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.dismiss-btn:hover {
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+}
+
 @media (max-width: 767px) {
     body {
         font-size: 24px;
