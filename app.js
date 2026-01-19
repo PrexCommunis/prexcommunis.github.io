@@ -950,27 +950,30 @@ function setupEventListeners() {
 // Dark mode functionality
 function initDarkMode() {
   const themeToggle = document.getElementById("theme-toggle");
-  const savedTheme = localStorage.getItem("theme");
 
-  // Check system preference
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-  // Apply theme: prioritize saved preference, then system preference
-  if (savedTheme === "dark" || (savedTheme === null && prefersDark)) {
-    document.body.classList.add("dark-mode");
+  if (!themeToggle) {
+    console.error("Theme toggle button not found");
+    return;
   }
 
   // Toggle theme on button click
   themeToggle.addEventListener("click", () => {
+    // Toggle on both html and body for consistency
+    document.documentElement.classList.toggle("dark-mode");
     document.body.classList.toggle("dark-mode");
 
     // Save preference to localStorage
-    if (document.body.classList.contains("dark-mode")) {
+    if (document.documentElement.classList.contains("dark-mode")) {
       localStorage.setItem("theme", "dark");
     } else {
       localStorage.setItem("theme", "light");
     }
   });
+
+  // Sync body class with html class (set by inline script)
+  if (document.documentElement.classList.contains("dark-mode")) {
+    document.body.classList.add("dark-mode");
+  }
 }
 
 // Start the app when DOM is loaded
