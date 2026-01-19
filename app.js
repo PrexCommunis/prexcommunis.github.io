@@ -947,6 +947,151 @@ function setupEventListeners() {
   });
 }
 
+// PWA Installation
+let deferredPrompt;
+
+function initPWA() {
+  // Check if app is already installed
+  const isInstalled = window.matchMedia("(display-mode: standalone)").matches;
+
+  // Listen for the install prompt event
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // Don't show install prompt if already installed or user dismissed recently
+    const installDismissed = localStorage.getItem("installDismissed");
+    const dismissTime = installDismissed ? parseInt(installDismissed) : 0;
+    const daysSinceDismiss = (Date.now() - dismissTime) / (1000 * 60 * 60 * 24);
+
+    if (!isInstalled && daysSinceDismiss > 7) {
+      // Show install prompt after a short delay
+      setTimeout(() => {
+        document.getElementById("install-prompt").style.display = "block";
+      }, 3000);
+    }
+  });
+
+  // Handle install button click
+  document.getElementById("install-button").addEventListener("click", async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+
+      if (outcome === "accepted") {
+        console.log("PWA installed");
+      }
+
+      deferredPrompt = null;
+      document.getElementById("install-prompt").style.display = "none";
+    }
+  });
+
+  // Handle dismiss button
+  document.getElementById("install-dismiss").addEventListener("click", () => {
+    document.getElementById("install-prompt").style.display = "none";
+    localStorage.setItem("installDismissed", Date.now().toString());
+  });
+
+  // Show notification prompt if installed but notifications not enabled
+  if (isInstalled && "Notification" in window && Notification.permission === "default") {
+    const notificationDismissed = localStorage.getItem("notificationDismissed");
+    const dismissTime = notificationDismissed ? parseInt(notificationDismissed) : 0;
+    const daysSinceDismiss = (Date.now() - dismissTime) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceDismiss > 3) {
+      setTimeout(() => {
+        document.getElementById("notification-prompt").style.display = "block";
+      }, 2000);
+    }
+  }
+}
+
+// Notification functionality
+function initNotifications() {
+  const enableButton = document.getElementById("enable-notifications");
+  const dismissButton = document.getElementById("notification-dismiss");
+
+  enableButton.addEventListener("click", async () => {
+    if ("Notification" in window && "serviceWorker" in navigator) {
+      const permission = await Notification.requestPermission();
+
+      if (permission === "granted") {
+        document.getElementById("notification-prompt").style.display = "none";
+        scheduleNotifications();
+      }
+    }
+  });
+
+  dismissButton.addEventListener("click", () => {
+    document.getElementById("notification-prompt").style.display = "none";
+    localStorage.setItem("notificationDismissed", Date.now().toString());
+  });
+
+  // If notifications already granted, schedule them
+  if ("Notification" in window && Notification.permission === "granted") {
+    scheduleNotifications();
+  }
+}
+
+function scheduleNotifications() {
+  // Check for next prayer time and schedule notification
+  const now = new Date();
+  const prayerTimes = [
+    { hour: 5, minute: 0, office: "morning", title: "Morning Prayer" },
+    { hour: 11, minute: 0, office: "midday", title: "Midday Prayer" },
+    { hour: 14, minute: 0, office: "evening", title: "Evening Prayer" },
+    { hour: 20, minute: 0, office: "compline", title: "Compline" },
+  ];
+
+  prayerTimes.forEach((prayer) => {
+    const prayerTime = new Date();
+    prayerTime.setHours(prayer.hour, prayer.minute, 0, 0);
+
+    // If prayer time has passed today, schedule for tomorrow
+    if (prayerTime <= now) {
+      prayerTime.setDate(prayerTime.getDate() + 1);
+    }
+
+    const timeUntilPrayer = prayerTime - now;
+
+    setTimeout(() => {
+      showNotification(prayer.title, prayer.office);
+      // Reschedule for next day
+      setInterval(() => {
+        showNotification(prayer.title, prayer.office);
+      }, 24 * 60 * 60 * 1000);
+    }, timeUntilPrayer);
+  });
+}
+
+function showNotification(title, office) {
+  if ("serviceWorker" in navigator && Notification.permission === "granted") {
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification(`Time for ${title}`, {
+        body: "Open Common Prayer to pray the Daily Office.",
+        icon: "/icon.svg",
+        badge: "/icon.svg",
+        tag: office,
+        requireInteraction: false,
+        vibrate: [200, 100, 200],
+      });
+    });
+  }
+}
+
+// Register service worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/service-worker.js")
+    .then((registration) => {
+      console.log("Service Worker registered:", registration);
+    })
+    .catch((error) => {
+      console.log("Service Worker registration failed:", error);
+    });
+}
+
 // Dark mode functionality
 function initDarkMode() {
   const themeToggle = document.getElementById("theme-toggle");
@@ -980,6 +1125,8 @@ function initDarkMode() {
 document.addEventListener("DOMContentLoaded", () => {
   init();
   initDarkMode();
+  initPWA();
+  initNotifications();
 
   // Show content once fonts are loaded (prevents text reflow flash)
   if (document.fonts && document.fonts.ready) {

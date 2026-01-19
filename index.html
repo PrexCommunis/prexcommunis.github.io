@@ -10,6 +10,10 @@
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <title>Common Prayer - Daily Office</title>
+        <link rel="manifest" href="manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Common Prayer" />
         <script>
             // Apply theme and office selection immediately to prevent flash
             (function () {
@@ -96,6 +100,30 @@
                 <circle cx="16" cy="4" r="0.5" fill="currentColor" />
             </svg>
         </button>
+
+        <!-- PWA Install Prompt -->
+        <div id="install-prompt" class="install-prompt" style="display: none;">
+            <div class="install-prompt-content">
+                <h3>Install Common Prayer</h3>
+                <p>Add to your home screen for offline access and prayer time notifications.</p>
+                <div class="install-prompt-buttons">
+                    <button id="install-button" class="install-btn">Install</button>
+                    <button id="install-dismiss" class="dismiss-btn">Not Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Permission Prompt -->
+        <div id="notification-prompt" class="notification-prompt" style="display: none;">
+            <div class="notification-prompt-content">
+                <h3>Enable Prayer Notifications</h3>
+                <p>Get notified at each prayer time: Morning (5 AM), Midday (11 AM), Evening (2 PM), and Compline (8 PM).</p>
+                <div class="notification-prompt-buttons">
+                    <button id="enable-notifications" class="install-btn">Enable</button>
+                    <button id="notification-dismiss" class="dismiss-btn">Not Now</button>
+                </div>
+            </div>
+        </div>
 
         <div class="app-container">
             <header>
