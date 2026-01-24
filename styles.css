@@ -70,7 +70,10 @@ body {
 
 .app-container {
     max-width: 800px;
-    margin: 0 auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: auto;
+    margin-left: 0;
     padding: 20px;
     overflow-x: hidden;
 }
