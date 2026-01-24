@@ -429,12 +429,7 @@ function formatLessonIntro(ref, lessonNumber) {
 
   const ordinal = lessonNumber === 'first' ? 'First' : 'Second';
 
-  if (parsed.verseStart === 1 && !parsed.verseEnd) {
-    // Full chapter
-    return `The ${ordinal} Lesson is written in the ${parsed.chapter}${getOrdinalSuffix(parsed.chapter)} chapter of ${parsed.book}.`;
-  } else {
-    return `The ${ordinal} Lesson is written in the ${parsed.chapter}${getOrdinalSuffix(parsed.chapter)} chapter of ${parsed.book}, beginning at the ${parsed.verseStart}${getOrdinalSuffix(parsed.verseStart)} verse.`;
-  }
+  return `The ${ordinal} Lesson is written in the Book of ${parsed.book}, in the ${parsed.chapter}${getOrdinalSuffix(parsed.chapter)} chapter, beginning at the ${parsed.verseStart}${getOrdinalSuffix(parsed.verseStart)} verse.`;
 }
 
 // Get ordinal suffix (1st, 2nd, 3rd, etc.)
