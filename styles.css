@@ -700,7 +700,7 @@ body.dark-mode .moon-icon {
 }
 
 .app-container.sidebar-collapsed {
-    margin-left: 0 !important;
+    margin-left: auto !important;
 }
 
 /* Hide old top navigation */
