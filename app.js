@@ -1857,6 +1857,10 @@ function setupSidebar() {
   if (!isMobile && sidebarCollapsed) {
     sidebar.classList.add('collapsed');
     appContainer.classList.add('sidebar-collapsed');
+    sidebarToggle.classList.remove('sidebar-open');
+  } else if (!isMobile && !sidebarCollapsed) {
+    // Desktop with sidebar visible
+    sidebarToggle.classList.add('sidebar-open');
   } else if (isMobile) {
     sidebar.classList.remove('open');
   }
@@ -1874,7 +1878,15 @@ function setupSidebar() {
       // Desktop: toggle collapse
       sidebar.classList.toggle('collapsed');
       appContainer.classList.toggle('sidebar-collapsed');
-      sidebarToggle.classList.toggle('sidebar-open');
+
+      // Update button position based on sidebar visibility (not collapsed)
+      if (sidebar.classList.contains('collapsed')) {
+        // Sidebar is now hidden - button stays at left: 20px
+        sidebarToggle.classList.remove('sidebar-open');
+      } else {
+        // Sidebar is now visible - move button right
+        sidebarToggle.classList.add('sidebar-open');
+      }
 
       // Save state to localStorage
       const isCollapsed = sidebar.classList.contains('collapsed');
@@ -1925,14 +1937,15 @@ function setupSidebar() {
       if (sidebarCollapsed) {
         sidebar.classList.add('collapsed');
         appContainer.classList.add('sidebar-collapsed');
+        sidebarToggle.classList.remove('sidebar-open');
       } else {
         sidebar.classList.remove('collapsed');
         appContainer.classList.remove('sidebar-collapsed');
+        sidebarToggle.classList.add('sidebar-open');
       }
       // Remove mobile classes
       sidebar.classList.remove('open');
       sidebarBackdrop.classList.remove('active');
-      sidebarToggle.classList.remove('sidebar-open');
     } else {
       // Mobile: always start closed
       sidebar.classList.remove('open', 'collapsed');
