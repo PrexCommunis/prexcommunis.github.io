@@ -1134,8 +1134,9 @@ function renderPrayer(office) {
 
   contentDiv.innerHTML = html;
 
-  // Inject readings for morning and evening prayer
+  // Inject dynamic content for morning and evening prayer
   if (office === 'morning' || office === 'evening') {
+    injectPsalms(office);
     injectReadings(office);
   }
 }
@@ -1394,12 +1395,10 @@ function buildLessonHtml(lessonNumber, reference, verses, isLoading = false) {
 
   return `
     <div class="lesson">
+      <h3 class="lesson-title">The ${ordinal} Lesson</h3>
       <p class="lesson-intro">${intro}</p>
       ${contentHtml}
-      <div class="lesson-response">
-        <p class="prayer-text">The Word of the Lord.</p>
-        <p class="prayer-text response">Thanks be to God.</p>
-      </div>
+      <p class="lesson-ending">Here endeth the ${ordinal} Lesson.</p>
     </div>
   `;
 }
@@ -1518,6 +1517,138 @@ async function injectReadings(office) {
         ${buildLessonHtml('second', officeReadings.second, null)}
       `;
     }
+  }
+}
+
+// =====================
+// Psalm System (30-Day Cycle)
+// =====================
+
+// Get cache key for today's psalms
+function getPsalmCacheKey() {
+  const now = new Date();
+  const dayOfMonth = now.getDate() > 30 ? 30 : now.getDate();
+  return `psalms-day-${dayOfMonth}`;
+}
+
+// Cache psalm text in localStorage
+function cachePsalms(office, psalmsData) {
+  const cacheKey = getPsalmCacheKey();
+  const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+  cached[office] = psalmsData;
+  localStorage.setItem(cacheKey, JSON.stringify(cached));
+}
+
+// Get cached psalm text
+function getCachedPsalms(office) {
+  const cacheKey = getPsalmCacheKey();
+  const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+  return cached[office] || null;
+}
+
+// Build HTML for a single psalm
+function buildPsalmHtml(psalmData, latinTitle) {
+  const versesHtml = psalmData.verses.map(v =>
+    `<p class="psalm-verse"><span class="verse-number">${v.verse}</span> ${v.text}</p>`
+  ).join('');
+
+  const latinSubtitle = latinTitle ? `<p class="rubric"><em>${latinTitle}</em></p>` : '';
+
+  return `
+    <div class="psalm">
+      <h3 class="psalm-title">${psalmData.title}</h3>
+      ${latinSubtitle}
+      ${versesHtml}
+    </div>
+  `;
+}
+
+// Load psalms for an office
+async function loadPsalms(office) {
+  const psalmRefs = getPsalmReferences(office);
+  if (!psalmRefs || psalmRefs.length === 0) {
+    console.log('No psalms found for today');
+    return null;
+  }
+
+  // Check cache first
+  const cached = getCachedPsalms(office);
+  if (cached) {
+    return cached;
+  }
+
+  // Fetch all psalms in parallel
+  const fetchPromises = psalmRefs.map(ref => fetchBibleText(ref.apiRef));
+  const results = await Promise.all(fetchPromises);
+
+  const psalmsData = psalmRefs.map((ref, index) => {
+    const apiResponse = results[index];
+    return {
+      title: ref.title,
+      number: ref.number,
+      latinTitle: getPsalmLatinTitle(ref.number),
+      verses: formatVerseText(apiResponse) || []
+    };
+  });
+
+  // Cache the psalms
+  cachePsalms(office, psalmsData);
+
+  return psalmsData;
+}
+
+// Inject psalms into the prayer content
+async function injectPsalms(office) {
+  const psalmSection = document.querySelector('.psalm');
+  if (!psalmSection) {
+    return;
+  }
+
+  // Get the parent section to replace entire psalm content
+  const parentSection = psalmSection.closest('.section');
+  if (!parentSection) {
+    return;
+  }
+
+  // Show loading state
+  parentSection.innerHTML = `
+    <p class="rubric">Then follows the Psalm or Psalms appointed.</p>
+    <div class="psalm">
+      <p class="loading-text">Loading Psalms...</p>
+    </div>
+  `;
+
+  // Load the psalms
+  const psalmsData = await loadPsalms(office);
+
+  if (psalmsData && psalmsData.length > 0) {
+    const psalmsHtml = psalmsData.map(psalm =>
+      buildPsalmHtml(psalm, psalm.latinTitle)
+    ).join('');
+
+    parentSection.innerHTML = `
+      <p class="rubric">Then follows the Psalm or Psalms appointed.</p>
+      ${psalmsHtml}
+      <div class="gloria">
+        <p>Glory be to the Father, and to the Son, and to the Holy Ghost;</p>
+        <p>as it was in the beginning, is now, and ever shall be, world without end. Amen.</p>
+      </div>
+    `;
+  } else {
+    // Fallback: show psalm references without full text
+    const psalmRefs = getPsalmReferences(office);
+    const refList = psalmRefs.map(ref => ref.title).join(', ');
+    parentSection.innerHTML = `
+      <p class="rubric">Then follows the Psalm or Psalms appointed.</p>
+      <div class="psalm">
+        <p class="psalm-title">${refList}</p>
+        <p class="scripture-fallback"><em>Psalm text could not be loaded.</em></p>
+      </div>
+      <div class="gloria">
+        <p>Glory be to the Father, and to the Son, and to the Holy Ghost;</p>
+        <p>as it was in the beginning, is now, and ever shall be, world without end. Amen.</p>
+      </div>
+    `;
   }
 }
 
