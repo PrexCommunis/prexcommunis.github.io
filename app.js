@@ -1133,6 +1133,11 @@ function renderPrayer(office) {
   });
 
   contentDiv.innerHTML = html;
+
+  // Inject readings for morning and evening prayer
+  if (office === 'morning' || office === 'evening') {
+    injectReadings(office);
+  }
 }
 
 // Setup event listeners
@@ -1331,6 +1336,188 @@ function initDarkMode() {
   // Sync body class with html class (set by inline script)
   if (document.documentElement.classList.contains("dark-mode")) {
     document.body.classList.add("dark-mode");
+  }
+}
+
+// =====================
+// Bible Readings System
+// =====================
+
+// Fetch Bible text from bible-api.com (KJV)
+async function fetchBibleText(reference) {
+  try {
+    // bible-api.com expects references like "Genesis+1:1-20" or "John+3:16"
+    const encodedRef = encodeURIComponent(reference);
+    const response = await fetch(`https://bible-api.com/${encodedRef}?translation=kjv`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${reference}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching ${reference}:`, error);
+    return null;
+  }
+}
+
+// Format verse text from API response
+function formatVerseText(apiResponse) {
+  if (!apiResponse || !apiResponse.verses) {
+    return null;
+  }
+
+  return apiResponse.verses.map(verse => ({
+    verse: verse.verse,
+    text: verse.text.trim()
+  }));
+}
+
+// Build HTML for a single lesson
+function buildLessonHtml(lessonNumber, reference, verses, isLoading = false) {
+  const ordinal = lessonNumber === 'first' ? 'First' : 'Second';
+  const intro = formatLessonIntro(reference, lessonNumber);
+
+  let contentHtml;
+
+  if (isLoading) {
+    contentHtml = `<p class="loading-text">Loading Scripture...</p>`;
+  } else if (verses) {
+    const versesHtml = verses.map(v =>
+      `<span class="verse"><sup class="verse-num">${v.verse}</sup>${v.text}</span>`
+    ).join(' ');
+    contentHtml = `<div class="scripture-text">${versesHtml}</div>`;
+  } else {
+    contentHtml = `<p class="scripture-fallback"><em>${reference}</em></p>`;
+  }
+
+  return `
+    <div class="lesson">
+      <p class="lesson-intro">${intro}</p>
+      ${contentHtml}
+      <div class="lesson-response">
+        <p class="prayer-text">The Word of the Lord.</p>
+        <p class="prayer-text response">Thanks be to God.</p>
+      </div>
+    </div>
+  `;
+}
+
+// Get cache key for today's readings
+function getCacheKey() {
+  const now = new Date();
+  return `readings-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+}
+
+// Cache readings in localStorage
+function cacheReadings(office, readings) {
+  const cacheKey = getCacheKey();
+  const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+  cached[office] = readings;
+  localStorage.setItem(cacheKey, JSON.stringify(cached));
+
+  // Clear old cache entries
+  clearOldCache();
+}
+
+// Get cached readings
+function getCachedReadings(office) {
+  const cacheKey = getCacheKey();
+  const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+  return cached[office] || null;
+}
+
+// Clear cache entries older than today
+function clearOldCache() {
+  const todayKey = getCacheKey();
+  const keysToRemove = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('readings-') && key !== todayKey) {
+      keysToRemove.push(key);
+    }
+  }
+
+  keysToRemove.forEach(key => localStorage.removeItem(key));
+}
+
+// Load readings for an office (morning or evening)
+async function loadReadings(office) {
+  const todaysReadings = getTodaysReadings();
+  if (!todaysReadings) {
+    console.log('No readings found for today');
+    return null;
+  }
+
+  const officeReadings = todaysReadings[office];
+  if (!officeReadings) {
+    console.log(`No ${office} readings found`);
+    return null;
+  }
+
+  // Check cache first
+  const cached = getCachedReadings(office);
+  if (cached) {
+    return cached;
+  }
+
+  // Fetch both lessons
+  const [firstData, secondData] = await Promise.all([
+    fetchBibleText(officeReadings.first),
+    fetchBibleText(officeReadings.second)
+  ]);
+
+  const readings = {
+    first: {
+      reference: officeReadings.first,
+      verses: formatVerseText(firstData)
+    },
+    second: {
+      reference: officeReadings.second,
+      verses: formatVerseText(secondData)
+    }
+  };
+
+  // Cache the readings
+  cacheReadings(office, readings);
+
+  return readings;
+}
+
+// Inject readings into the prayer content
+async function injectReadings(office) {
+  const readingsSection = document.querySelector('.reading');
+  if (!readingsSection) {
+    return;
+  }
+
+  // Show loading state
+  readingsSection.innerHTML = `
+    ${buildLessonHtml('first', 'Loading...', null, true)}
+    ${buildLessonHtml('second', 'Loading...', null, true)}
+  `;
+
+  // Load the readings
+  const readings = await loadReadings(office);
+
+  if (readings) {
+    readingsSection.innerHTML = `
+      ${buildLessonHtml('first', readings.first.reference, readings.first.verses)}
+      ${buildLessonHtml('second', readings.second.reference, readings.second.verses)}
+    `;
+  } else {
+    // Fallback to placeholder if readings couldn't be loaded
+    const todaysReadings = getTodaysReadings();
+    const officeReadings = todaysReadings ? todaysReadings[office] : null;
+
+    if (officeReadings) {
+      readingsSection.innerHTML = `
+        ${buildLessonHtml('first', officeReadings.first, null)}
+        ${buildLessonHtml('second', officeReadings.second, null)}
+      `;
+    }
   }
 }
 
