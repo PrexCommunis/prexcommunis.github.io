@@ -1847,7 +1847,10 @@ function setupSidebar() {
   const appContainer = document.getElementById('app-container');
   const sidebarNavItems = document.querySelectorAll('.sidebar-nav-item');
 
-  if (!sidebar || !sidebarToggle) return;
+  if (!sidebar || !sidebarToggle || !appContainer) {
+    console.error('Sidebar elements not found:', { sidebar: !!sidebar, sidebarToggle: !!sidebarToggle, appContainer: !!appContainer });
+    return;
+  }
 
   // Load saved sidebar state from localStorage
   const sidebarCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
@@ -1855,14 +1858,19 @@ function setupSidebar() {
 
   // Initialize sidebar state based on device
   if (!isMobile && sidebarCollapsed) {
+    // Desktop with sidebar collapsed (user preference from localStorage)
     sidebar.classList.add('collapsed');
     appContainer.classList.add('sidebar-collapsed');
     sidebarToggle.classList.remove('sidebar-open');
   } else if (!isMobile && !sidebarCollapsed) {
-    // Desktop with sidebar visible
+    // Desktop with sidebar visible (default state)
+    sidebar.classList.remove('collapsed');
+    appContainer.classList.remove('sidebar-collapsed');
     sidebarToggle.classList.add('sidebar-open');
   } else if (isMobile) {
+    // Mobile: sidebar hidden by default
     sidebar.classList.remove('open');
+    appContainer.classList.remove('sidebar-collapsed');
   }
 
   // Toggle sidebar
