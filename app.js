@@ -1153,8 +1153,8 @@ function getBaptismOfLord(year) {
 // Get ordinal number string
 function getOrdinal(num) {
   const ordinals = ["", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth",
-                   "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth",
-                   "Eighteenth", "Nineteenth", "Twentieth", "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth"];
+    "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth",
+    "Eighteenth", "Nineteenth", "Twentieth", "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth"];
   return ordinals[num] || `${num}th`;
 }
 
@@ -1873,8 +1873,12 @@ function setupSidebar() {
     appContainer.classList.remove('sidebar-collapsed');
   }
 
-  // Remove the data attribute now that JavaScript has taken over
-  document.documentElement.removeAttribute('data-sidebar-collapsed');
+  // Update data attribute to match initial state
+  if (!isMobile && sidebarCollapsed) {
+    document.documentElement.setAttribute('data-sidebar-collapsed', 'true');
+  } else {
+    document.documentElement.removeAttribute('data-sidebar-collapsed');
+  }
 
   // Toggle sidebar
   sidebarToggle.addEventListener('click', () => {
@@ -1894,9 +1898,13 @@ function setupSidebar() {
       if (sidebar.classList.contains('collapsed')) {
         // Sidebar is now hidden - button stays at left: 20px
         sidebarToggle.classList.remove('sidebar-open');
+        document.documentElement.setAttribute('data-sidebar-collapsed', 'true');
+        localStorage.setItem('sidebar-collapsed', 'true');
       } else {
         // Sidebar is now visible - move button right
         sidebarToggle.classList.add('sidebar-open');
+        document.documentElement.removeAttribute('data-sidebar-collapsed');
+        localStorage.setItem('sidebar-collapsed', 'false');
       }
 
       // Save state to localStorage
