@@ -1,4 +1,4 @@
-const CACHE_NAME = "common-prayer-v4";
+const CACHE_NAME = "common-prayer-v5";
 const urlsToCache = [
   "/PrexCommunis/",
   "/PrexCommunis/index.html",
@@ -23,12 +23,29 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// Fetch from cache, fallback to network
+// Fetch from network first, then fall back to cache
 self.addEventListener("fetch", (event) => {
+  // Only handle GET requests and local assets
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    }),
+    fetch(event.request)
+      .then((networkResponse) => {
+        // If successful, update the cache
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // If network fails, serve from cache
+        return caches.match(event.request);
+      })
   );
 });
 
