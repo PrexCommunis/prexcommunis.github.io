@@ -55,6 +55,7 @@ html.fonts-loading body {
 }
 
 /* Disable transitions during load/initialization */
+html.initializing,
 html.initializing *,
 html.initializing *:before,
 html.initializing *:after {
