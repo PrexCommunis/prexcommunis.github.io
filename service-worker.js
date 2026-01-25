@@ -1,9 +1,13 @@
-const CACHE_NAME = "common-prayer-v2";
+const CACHE_NAME = "common-prayer-v4";
 const urlsToCache = [
   "/PrexCommunis/",
   "/PrexCommunis/index.html",
   "/PrexCommunis/styles.css",
-  "/PrexCommunis/app.js",
+  "/PrexCommunis/js/app.js",
+  "/PrexCommunis/js/sentences.js",
+  "/PrexCommunis/js/psalms.js",
+  "/PrexCommunis/js/lectionary.js",
+  "/PrexCommunis/js/collects.js",
   "/PrexCommunis/manifest.json",
   "/PrexCommunis/icon.svg",
 ];

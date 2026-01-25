@@ -1,13 +1,13 @@
 :root {
-    --primary-bg: #f4f1e8;
-    --secondary-bg: #ebe6d9;
+    --primary-bg: #e6dfcf;
+    --secondary-bg: #dcd2bb;
     --text-primary: #3a3a3a;
-    --text-secondary: #6b6b6b;
+    --text-secondary: #5d5d5d;
     --rubric-color: #a94442;
     --accent-color: #8b6914;
-    --border-color: #d4cfc4;
-    --shadow: rgba(0, 0, 0, 0.08);
-    --page-color: #faf8f3;
+    --border-color: #c4b89e;
+    --shadow: rgba(0, 0, 0, 0.12);
+    --page-color: #f0e9d2;
 }
 
 /* Sidebar variables */
@@ -41,7 +41,7 @@ body.dark-mode {
 
 /* Light mode sidebar override */
 :root:not(.dark-mode) {
-    --sidebar-bg: rgba(255, 255, 255, 0.98);
+    --sidebar-bg: rgba(240, 233, 210, 0.98);
     --sidebar-border: rgba(0, 0, 0, 0.1);
     --sidebar-hover: rgba(0, 0, 0, 0.05);
     --sidebar-active: rgba(139, 105, 20, 0.1);
