@@ -1468,7 +1468,37 @@ function formatVerseText(apiResponse) {
   }));
 }
 
-// Build HTML for a single lesson
+// Build clear reading instructions
+function buildReadingInstructions(lessonNumber, reference) {
+  const ordinal = lessonNumber === 'first' ? 'First' : 'Second';
+  const intro = formatLessonIntro(reference, lessonNumber);
+
+  return `
+    <div class="reading-instructions">
+      <div class="reading-header">
+        <h3 class="reading-title">The ${ordinal} Lesson</h3>
+        <div class="reading-reference">${reference}</div>
+      </div>
+      
+      <div class="instruction-box">
+        <p class="instruction-text">📖 <strong>Say this introduction:</strong></p>
+        <p class="intro-text">"${intro}"</p>
+      </div>
+
+      <div class="instruction-box">
+        <p class="instruction-text">📚 <strong>Read from your Bible:</strong></p>
+        <div class="bible-reference">
+          <span class="book">${parseReference(reference).book}</span>
+          <span class="chapter-verse">${parseReference(reference).chapter}:${parseReference(reference).verseStart}</span>
+        </div>
+      </div>
+
+      <p class="lesson-ending">Here endeth the ${ordinal} Lesson.</p>
+    </div>
+  `;
+}
+
+// Build HTML for a single lesson (kept for compatibility)
 function buildLessonHtml(lessonNumber, reference, verses, isLoading = false) {
   const ordinal = lessonNumber === 'first' ? 'First' : 'Second';
   const intro = formatLessonIntro(reference, lessonNumber);
@@ -1579,7 +1609,7 @@ async function loadReadings(office) {
 }
 
 // Inject readings into the prayer content
-async function injectReadings(office) {
+function injectReadings(office) {
   // Find the sections by looking for the type attributes or finding all sections
   const sections = document.querySelectorAll('.section');
   let firstLessonSection = null;
@@ -1599,46 +1629,31 @@ async function injectReadings(office) {
     return;
   }
 
-  // Show loading state
-  firstLessonSection.innerHTML = `
-    <p class="rubric">Then shall be read THE FIRST LESSON as appointed, and before each Lesson the Minister shall say, The First [or Second] Lesson is written in such a book, in such a chapter, beginning at such a verse. And after the Lesson he shall say, Here endeth the First [or Second] Lesson.</p>
-    <p class="loading-text">Loading...</p>
-  `;
+  // Get today's readings directly from lectionary
+  const todaysReadings = getTodaysReadings();
+  const officeReadings = todaysReadings ? todaysReadings[office] : null;
 
-  secondLessonSection.innerHTML = `
-    <p class="rubric">Then shall be read in like manner THE SECOND LESSON as appointed; and after that the following Canticle, except when it forms part of the Gospel or Second Lesson appointed for the day.</p>
-    <p class="loading-text">Loading...</p>
-  `;
-
-  // Load the readings
-  const readings = await loadReadings(office);
-
-  if (readings) {
+  if (officeReadings) {
     firstLessonSection.innerHTML = `
       <p class="rubric">Then shall be read THE FIRST LESSON as appointed, and before each Lesson the Minister shall say, The First [or Second] Lesson is written in such a book, in such a chapter, beginning at such a verse. And after the Lesson he shall say, Here endeth the First [or Second] Lesson.</p>
-      ${buildLessonHtml('first', readings.first.reference, readings.first.verses)}
+      ${buildReadingInstructions('first', officeReadings.first)}
     `;
 
     secondLessonSection.innerHTML = `
       <p class="rubric">Then shall be read in like manner THE SECOND LESSON as appointed; and after that the following Canticle, except when it forms part of the Gospel or Second Lesson appointed for the day.</p>
-      ${buildLessonHtml('second', readings.second.reference, readings.second.verses)}
+      ${buildReadingInstructions('second', officeReadings.second)}
     `;
   } else {
-    // Fallback to placeholder if readings couldn't be loaded
-    const todaysReadings = getTodaysReadings();
-    const officeReadings = todaysReadings ? todaysReadings[office] : null;
+    // Fallback if no readings found
+    firstLessonSection.innerHTML = `
+      <p class="rubric">Then shall be read THE FIRST LESSON as appointed, and before each Lesson the Minister shall say, The First [or Second] Lesson is written in such a book, in such a chapter, beginning at such a verse. And after the Lesson he shall say, Here endeth the First [or Second] Lesson.</p>
+      <p class="error-message">No readings found for today.</p>
+    `;
 
-    if (officeReadings) {
-      firstLessonSection.innerHTML = `
-        <p class="rubric">Then shall be read THE FIRST LESSON as appointed, and before each Lesson the Minister shall say, The First [or Second] Lesson is written in such a book, in such a chapter, beginning at such a verse. And after the Lesson he shall say, Here endeth the First [or Second] Lesson.</p>
-        ${buildLessonHtml('first', officeReadings.first, null)}
-      `;
-
-      secondLessonSection.innerHTML = `
-        <p class="rubric">Then shall be read in like manner THE SECOND LESSON as appointed; and after that the following Canticle, except when it forms part of the Gospel or Second Lesson appointed for the day.</p>
-        ${buildLessonHtml('second', officeReadings.second, null)}
-      `;
-    }
+    secondLessonSection.innerHTML = `
+      <p class="rubric">Then shall be read in like manner THE SECOND LESSON as appointed; and after that the following Canticle, except when it forms part of the Gospel or Second Lesson appointed for the day.</p>
+      <p class="error-message">No readings found for today.</p>
+    `;
   }
 }
 

@@ -801,3 +801,150 @@ html[data-sidebar-collapsed="true"] .app-container {
         padding-left: 20px;
     }
 }
+
+/* Reading Instructions Styles */
+.reading-instructions {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+    border: 2px solid var(--accent-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.reading-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.reading-title {
+    color: var(--text-primary);
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 0;
+}
+
+.reading-reference {
+    background: var(--accent-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.instruction-box {
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 18px;
+    margin: 15px 0;
+    transition: transform 0.2s ease;
+}
+
+.instruction-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px var(--shadow);
+}
+
+.instruction-text {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.1em;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.intro-text {
+    background: var(--secondary-bg);
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent-color);
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 1.05em;
+    line-height: 1.5;
+    quotes: "“" "”";
+}
+
+.bible-reference {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(45deg, var(--accent-color), var(--rubric-color));
+    color: white;
+    border-radius: 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.book {
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.chapter-verse {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1em;
+}
+
+.lesson-ending {
+    text-align: center;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+/* Dark mode adjustments for reading instructions */
+.dark-mode .reading-instructions {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+}
+
+.dark-mode .intro-text {
+    background: var(--secondary-bg);
+    color: var(--text-secondary);
+}
+
+.dark-mode .instruction-box {
+    background: var(--primary-bg);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .reading-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .reading-reference {
+        text-align: center;
+    }
+    
+    .bible-reference {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .reading-instructions {
+        padding: 16px;
+    }
+    
+    .instruction-box {
+        padding: 12px;
+    }
+}
