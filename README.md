@@ -1,8 +1,8 @@
-# PrexCommunis
+# 📖 PrexCommunis
 
 A web app for praying the Daily Office from the Book of Common Prayer (1662/1962 Canadian).
 
-## What it does
+## Features
 
 - Morning and Evening Prayer with the full traditional structure
 - Psalms from the 30-day psalter cycle
@@ -10,7 +10,7 @@ A web app for praying the Daily Office from the Book of Common Prayer (1662/1962
 - Collects selected by liturgical season
 - Works offline, installable as a PWA
 
-## Running it
+## 🚀 Running it
 
 Just open `index.html` in a browser. No build step, no dependencies.
 
