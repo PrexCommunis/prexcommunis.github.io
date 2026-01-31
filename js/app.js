@@ -771,13 +771,13 @@ const prayerData = {
                     <p class="prayer-text">Brethren, be sober, be vigilant; because your adversary the devil, as a roaring lion, walketh about, seeking whom he may devour: whom resist, stedfast in the faith. <span class="rubric">1 St Peter 5. 8, 9.</span></p>
 
                     <p class="prayer-text">O God, make speed to save us;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">O Lord, make haste to help us.</span></p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">O Lord, make haste to help us.</span></p>
 
-                    <p class="prayer-text indent"><em>Minister</em> Glory be to the Father, and to the Son, and to the Holy Ghost;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">As it was in the beginning, is now, and ever shall be, world without end. Amen.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> Glory be to the Father, and to the Son, and to the Holy Ghost;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">As it was in the beginning, is now, and ever shall be, world without end. Amen.</span></p>
 
-                    <p class="prayer-text indent"><em>Minister</em> Praise ye the Lord;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">The Lord's name be praised.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> Praise ye the Lord;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">The Lord's name be praised.</span></p>
 
                     <p class="rubric">Then shall be said or sung one or more of the following Psalms: Psalm 4; Psalm 31: 1-6; Psalm 91; Psalm 134; or any other Psalm or Psalms.</p>
                 </div>`,
@@ -865,23 +865,23 @@ const prayerData = {
                         But deliver us from evil. <span class="response">Amen.</span>
                     </p>
 
-                    <p class="prayer-text"><em>Minister</em> O Lord, show thy mercy upon us;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">And grant us thy salvation.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> O Lord, show thy mercy upon us;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">And grant us thy salvation.</span></p>
 
-                    <p class="prayer-text"><em>Minister</em> O Lord, save the King;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">And mercifully hear us when we call upon thee.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> O Lord, save the King;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">And mercifully hear us when we call upon thee.</span></p>
 
-                    <p class="prayer-text"><em>Minister</em> Endue thy Ministers with righteousness;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">And make thy chosen people joyful.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> Endue thy Ministers with righteousness;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">And make thy chosen people joyful.</span></p>
 
-                    <p class="prayer-text"><em>Minister</em> O Lord, save thy people;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">And bless thine inheritance.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> O Lord, save thy people;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">And bless thine inheritance.</span></p>
 
-                    <p class="prayer-text"><em>Minister</em> Give peace in our time, O Lord;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">And evermore mightily defend us.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> Give peace in our time, O Lord;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">And evermore mightily defend us.</span></p>
 
-                    <p class="prayer-text"><em>Minister</em> O God, make clean our hearts within us;</p>
-                    <p class="prayer-text indent"><em>Answer</em> <span class="response">And take not thy Holy Spirit from us.</span></p>
+                    <p class="prayer-text minister-line"><em>Minister</em> O God, make clean our hearts within us;</p>
+                    <p class="prayer-text answer-line"><em>Answer</em> <span class="response">And take not thy Holy Spirit from us.</span></p>
                 </div>`,
       },
       {
