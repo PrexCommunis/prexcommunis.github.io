@@ -725,30 +725,42 @@ html[data-sidebar-collapsed="true"] .sidebar {
     html:not([data-sidebar-collapsed="true"]) .sidebar-toggle {
         left: calc(var(--sidebar-width) + 20px);
     }
+    
+    /* Office switch button follows Material Design - pushed by sidebar */
+    html[data-sidebar-collapsed="true"] .office-switch-btn {
+        left: 70px;
+    }
+    
+    html:not([data-sidebar-collapsed="true"]) .office-switch-btn {
+        left: calc(var(--sidebar-width) + 70px);
+    }
 }
 
 /* Office Switch Button */
 .office-switch-btn {
     position: fixed;
     top: 20px;
-    right: 20px;
-    left: auto;
+    left: 70px;
+    right: auto;
     height: 40px;
     border: none;
     background: var(--secondary-bg);
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     padding: 0 16px;
     gap: 8px;
-    z-index: 1001;
+    z-index: 1002;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px var(--shadow);
     font-family: inherit;
     font-size: 14px;
     color: var(--text-color);
+    /* Ensure it's visible by default */
+    visibility: visible;
+    opacity: 1;
 }
 
 .office-switch-btn:hover {
@@ -771,7 +783,7 @@ html[data-sidebar-collapsed="true"] .sidebar {
 
 @media (max-width: 767px) {
     .office-switch-btn {
-        right: 10px;
+        left: 70px;
         padding: 0 12px;
         font-size: 12px;
     }
