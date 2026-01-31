@@ -319,7 +319,7 @@ const prayerData = {
                         <p class="prayer-text">
                             Almighty Father, whose kingdom is everlasting: We beseech thee of thy mercy to direct and prosper the counsels of all those who bear authority in this land, that in humility and honesty they may faithfully serve the people committed to their charge. And grant, we pray thee, that religion and piety, peace and unity, truth and justice, may be established among us for all generations, through Jesus Christ our Lord. <span class="response">Amen.</span>
                         </p>
-                        <p class="copyright-notice" style="font-size: 0.75em; font-style: italic; color: #666; margin-top: 0.5em;">
+                        <p class="copyright-notice" style="font-size: 0.7em; font-style: italic; color: #888; margin-top: -12px; margin-bottom: 0;">
                             Taken from The 1662 Book of Common Prayer: International Edition (IVP Academic 2021). All rights to new material and updated language reserved.
                         </p>
                     </div>
@@ -632,7 +632,7 @@ const prayerData = {
                         <p class="prayer-text">
                             Almighty Father, whose kingdom is everlasting: We beseech thee of thy mercy to direct and prosper the counsels of all those who bear authority in this land, that in humility and honesty they may faithfully serve the people committed to their charge. And grant, we pray thee, that religion and piety, peace and unity, truth and justice, may be established among us for all generations, through Jesus Christ our Lord. <span class="response">Amen.</span>
                         </p>
-                        <p class="copyright-notice" style="font-size: 0.75em; font-style: italic; color: #666; margin-top: 0.5em;">
+                        <p class="copyright-notice" style="font-size: 0.7em; font-style: italic; color: #888; margin-top: -12px; margin-bottom: 0;">
                             Taken from The 1662 Book of Common Prayer: International Edition (IVP Academic 2021). All rights to new material and updated language reserved.
                         </p>
                     </div>
