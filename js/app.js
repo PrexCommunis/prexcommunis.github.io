@@ -1496,6 +1496,11 @@ function formatVerseText(apiResponse) {
 function buildReadingInstructions(lessonNumber, reference) {
   const ordinal = lessonNumber === 'first' ? 'First' : 'Second';
   const intro = formatLessonIntro(reference, lessonNumber);
+  const parsed = parseReference(reference);
+
+  // If reference can't be parsed, show simple fallback
+  const bookHtml = parsed ? parsed.book : reference;
+  const chapterVerseHtml = parsed ? `${parsed.chapter}:${parsed.verseStart}` : '';
 
   return `
     <div class="reading-instructions">
@@ -1503,7 +1508,7 @@ function buildReadingInstructions(lessonNumber, reference) {
         <h3 class="reading-title">The ${ordinal} Lesson</h3>
         <div class="reading-reference">${reference}</div>
       </div>
-      
+
       <div class="instruction-box">
         <p class="instruction-text">📖 <strong>Say this introduction:</strong></p>
         <p class="intro-text">"${intro}"</p>
@@ -1512,8 +1517,8 @@ function buildReadingInstructions(lessonNumber, reference) {
       <div class="instruction-box">
         <p class="instruction-text">📚 <strong>Read from your Bible:</strong></p>
         <div class="bible-reference">
-          <span class="book">${parseReference(reference).book}</span>
-          <span class="chapter-verse">${parseReference(reference).chapter}:${parseReference(reference).verseStart}</span>
+          <span class="book">${bookHtml}</span>
+          ${chapterVerseHtml ? `<span class="chapter-verse">${chapterVerseHtml}</span>` : ''}
         </div>
       </div>
 
