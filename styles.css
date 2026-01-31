@@ -823,7 +823,7 @@ html[data-sidebar-collapsed="true"] .app-container {
 
 .reading-title {
     color: var(--text-primary);
-    font-size: 1.5em;
+    font-size: 1.15em;
     font-weight: 600;
     margin: 0;
 }
@@ -880,7 +880,7 @@ html[data-sidebar-collapsed="true"] .app-container {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 1.3em;
+    font-size: 1.0em;
     font-weight: 700;
     color: var(--text-primary);
     text-align: center;
