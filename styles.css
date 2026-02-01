@@ -726,13 +726,41 @@ html[data-sidebar-collapsed="true"] .sidebar {
         left: calc(var(--sidebar-width) + 20px);
     }
     
-    /* Office switch button follows Material Design - pushed by sidebar */
+    /* Office switch button positioned to the right of sidebar toggle with proper spacing */
     html[data-sidebar-collapsed="true"] .office-switch-btn {
-        left: 70px;
+        left: 75px;
+        padding: 0 16px;
+        width: auto;
+        min-width: 44px;
     }
-    
+
     html:not([data-sidebar-collapsed="true"]) .office-switch-btn {
-        left: calc(var(--sidebar-width) + 70px);
+        left: calc(var(--sidebar-width) + 75px);
+        padding: 0 16px;
+        width: auto;
+        min-width: 44px;
+    }
+
+    .office-switch-text {
+        display: inline;
+    }
+}
+
+/* Responsive adjustments for smaller desktop windows */
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* On smaller desktop screens, reduce padding to prevent overlap */
+    .office-switch-btn {
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+    /* Ensure minimum safe distance between buttons */
+    html[data-sidebar-collapsed="true"] .office-switch-btn {
+        left: 75px;
+    }
+
+    html:not([data-sidebar-collapsed="true"]) .office-switch-btn {
+        left: calc(var(--sidebar-width) + 75px);
     }
 }
 
@@ -753,11 +781,11 @@ html[data-sidebar-collapsed="true"] .sidebar {
     padding: 0 16px;
     gap: 8px;
     z-index: 1002;
-    transition: all 0.2s ease;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 8px var(--shadow);
     font-family: inherit;
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--text-primary);
     /* Ensure it's visible by default */
     visibility: visible;
     opacity: 1;
@@ -835,6 +863,12 @@ html[data-sidebar-collapsed="true"] .app-container {
 
 @media (max-width: 767px) {
 
+    /* Mobile Button Positioning */
+    .theme-toggle {
+        top: calc(10px + env(safe-area-inset-top));
+        right: calc(10px + env(safe-area-inset-right));
+    }
+
     /* Mobile Sidebar Styles */
     .sidebar {
         transform: translateX(-100%);
@@ -848,27 +882,49 @@ html[data-sidebar-collapsed="true"] .app-container {
         margin-left: 0 !important;
     }
 
-    .sidebar-toggle,
-    .sidebar-toggle.sidebar-open {
+    .sidebar-toggle {
         left: calc(10px + env(safe-area-inset-left));
         top: calc(10px + env(safe-area-inset-top));
         right: auto;
+        width: 44px;
+        height: 44px;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .sidebar-toggle.sidebar-open {
         transform: translateX(var(--sidebar-width));
     }
 
+    /* Office switch button on mobile - default closed state */
+    .office-switch-btn {
+        top: calc(10px + env(safe-area-inset-top));
+        left: calc(65px + env(safe-area-inset-left)) !important;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border-radius: 8px;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        z-index: 1001;
+    }
+
+    /* Office switch button on mobile - open state */
+    .office-switch-btn.sidebar-open {
+        transform: translateX(var(--sidebar-width));
+    }
+
     body {
         font-size: 24px;
+        padding-top: 0;
     }
 
     header h1 {
-        font-size: 3rem;
+        font-size: 2.5rem;
+        margin-top: 60px;
     }
 
     .app-container {
         padding: 10px;
+        padding-top: 20px;
     }
 
     main {
@@ -1046,5 +1102,74 @@ html[data-sidebar-collapsed="true"] .app-container {
     
     .instruction-box {
         padding: 12px;
+    }
+}
+
+/* Very small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .theme-toggle {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .sidebar-toggle {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .office-switch-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    body {
+        font-size: 20px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+        margin-top: 70px;
+    }
+    
+    .app-container {
+        padding: 8px;
+        padding-top: 15px;
+    }
+    
+    main {
+        padding: 12px;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+    }
+    
+    .date-display {
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Ensure minimum touch targets */
+@media (max-width: 767px) {
+    .sidebar-nav-item {
+        min-height: 48px;
+        padding: 12px 20px;
+    }
+    
+    .nav-btn {
+        min-height: 44px;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .install-btn,
+    .dismiss-btn {
+        min-height: 44px;
+        padding: 12px 20px;
     }
 }

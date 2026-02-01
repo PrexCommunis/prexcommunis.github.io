@@ -2052,10 +2052,14 @@ function setupSidebar() {
 
     if (isMobile) {
       // Mobile: toggle overlay mode
+      const wasOpen = sidebar.classList.contains('open');
       sidebar.classList.remove('collapsed');
       sidebar.classList.toggle('open');
       sidebarBackdrop.classList.toggle('active');
       sidebarToggle.classList.toggle('sidebar-open');
+      
+      // Update office switch button position
+      updateOfficeSwitchButtonPosition(!wasOpen);
     } else {
       // Desktop: toggle collapse
       sidebar.classList.toggle('collapsed');
@@ -2074,6 +2078,9 @@ function setupSidebar() {
         localStorage.setItem('sidebar-collapsed', 'false');
       }
 
+      // Also update office switch button position to match sidebar state
+      updateOfficeSwitchButtonPosition(!sidebar.classList.contains('collapsed'));
+
       // Save state to localStorage
       const isCollapsed = sidebar.classList.contains('collapsed');
       localStorage.setItem('sidebar-collapsed', isCollapsed);
@@ -2085,6 +2092,7 @@ function setupSidebar() {
     sidebar.classList.remove('open');
     sidebarBackdrop.classList.remove('active');
     sidebarToggle.classList.remove('sidebar-open');
+    updateOfficeSwitchButtonPosition(false);
   });
 
   // Setup navigation items
@@ -2110,6 +2118,7 @@ function setupSidebar() {
         sidebar.classList.remove('open');
         sidebarBackdrop.classList.remove('active');
         sidebarToggle.classList.remove('sidebar-open');
+        updateOfficeSwitchButtonPosition(false);
       }
 
       // Scroll to top
@@ -2139,11 +2148,13 @@ function setupSidebar() {
         // Remove mobile classes
         sidebar.classList.remove('open');
         sidebarBackdrop.classList.remove('active');
+        updateOfficeSwitchButtonPosition(false);
       } else {
         // Mobile: always start closed when transitioning from desktop
         sidebar.classList.remove('open', 'collapsed');
         sidebarBackdrop.classList.remove('active');
         sidebarToggle.classList.remove('sidebar-open');
+        updateOfficeSwitchButtonPosition(false);
       }
       lastIsMobile = isMobile;
     }
@@ -2160,6 +2171,19 @@ function setActiveSidebarItem(office) {
       item.classList.remove('active');
     }
   });
+}
+
+// Update office switch button position based on sidebar state
+function updateOfficeSwitchButtonPosition(sidebarOpen) {
+  const officeSwitchBtn = document.getElementById("office-switch-btn");
+  if (!officeSwitchBtn) return;
+
+  // Toggle class for CSS to handle positioning
+  if (sidebarOpen) {
+    officeSwitchBtn.classList.add('sidebar-open');
+  } else {
+    officeSwitchBtn.classList.remove('sidebar-open');
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
