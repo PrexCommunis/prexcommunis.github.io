@@ -7,7 +7,7 @@ const offices = [
     { id: 'midday', label: 'Midday Prayer', icon: '☀️' },
     { id: 'evening', label: 'Evening Prayer', icon: '🕯️' },
     { id: 'compline', label: 'Compline', icon: '🌙' },
-    { id: 'lectionary', label: 'Readings', icon: '📖' },
+    { id: 'lectionary', label: 'Lectionary', icon: '📖' },
 ];
 
 export default function Sidebar() {

@@ -47,9 +47,9 @@ const psalm119Sections = {
   145: { start: 145, end: 176 }
 };
 
-// Get psalms for today's office
-export function getTodaysPsalms(office) {
-  const dayOfMonth = new Date().getDate();
+// Get psalms for a specific date
+export function getPsalmsForDate(office, date) {
+  const dayOfMonth = date.getDate();
   // Day 31 uses day 30's psalms
   const cycleDay = dayOfMonth > 30 ? 30 : dayOfMonth;
 
@@ -57,6 +57,11 @@ export function getTodaysPsalms(office) {
     return psalmCycle[cycleDay][office];
   }
   return null;
+}
+
+// Get psalms for today's office
+export function getTodaysPsalms(office) {
+  return getPsalmsForDate(office, new Date());
 }
 
 // Format psalm reference for API call
@@ -68,8 +73,8 @@ function formatPsalmReference(psalmNum, startVerse, endVerse) {
 }
 
 // Get psalm references formatted for display and fetching
-export function getPsalmReferences(office) {
-  const psalms = getTodaysPsalms(office);
+export function getPsalmReferences(office, date = new Date()) {
+  const psalms = getPsalmsForDate(office, date);
   if (!psalms) return [];
 
   const references = [];

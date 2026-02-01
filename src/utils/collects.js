@@ -186,11 +186,9 @@ export const collects = {
   }
 };
 
-// Function to get the collect for today
-// Function to get the collect for today
-export function getTodaysCollect() {
-  const now = new Date();
-  const liturgicalInfo = getLiturgicalInfo(now);
+// Function to get the collect for a specific date
+export function getCollectForDate(date) {
+  const liturgicalInfo = getLiturgicalInfo(date);
 
   if (!liturgicalInfo) return null;
 
@@ -259,6 +257,11 @@ export function getTodaysCollect() {
   }
 
   return getGeneralCollect(season);
+}
+
+// Function to get the collect for today
+export function getTodaysCollect() {
+  return getCollectForDate(new Date());
 }
 
 // General collect fallback
