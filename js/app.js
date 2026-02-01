@@ -1010,12 +1010,12 @@ function updateOfficeSwitchButton() {
   
   iconElement.textContent = officeIcons[appropriateOffice];
   textElement.textContent = `Switch to ${officeNames[appropriateOffice]}`;
-  
+
   // Hide button if already on appropriate office
   if (currentOffice === appropriateOffice) {
-    officeSwitchBtn.style.display = 'none';
+    officeSwitchBtn.classList.add('hidden');
   } else {
-    officeSwitchBtn.style.display = 'flex';
+    officeSwitchBtn.classList.remove('hidden');
   }
 }
 

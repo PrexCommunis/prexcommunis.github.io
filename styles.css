@@ -775,7 +775,7 @@ html[data-sidebar-collapsed="true"] .sidebar {
     background: var(--secondary-bg);
     border-radius: 8px;
     cursor: pointer;
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 16px;
@@ -789,6 +789,10 @@ html[data-sidebar-collapsed="true"] .sidebar {
     /* Ensure it's visible by default */
     visibility: visible;
     opacity: 1;
+}
+
+.office-switch-btn.hidden {
+    display: none !important;
 }
 
 .office-switch-btn:hover {
