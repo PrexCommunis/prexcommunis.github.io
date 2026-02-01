@@ -892,7 +892,7 @@ html[data-sidebar-collapsed="true"] .app-container {
         right: auto;
         width: 44px;
         height: 44px;
-        transition: transform 0.25s linear;
+        transition: transform 0.2s ease-in-out;
     }
 
     .sidebar-toggle.sidebar-open {
@@ -907,7 +907,7 @@ html[data-sidebar-collapsed="true"] .app-container {
         height: 44px;
         padding: 0;
         border-radius: 8px;
-        transition: transform 0.25s linear !important;
+        transition: transform 0.2s ease-in-out !important;
         z-index: 1002;
     }
 
