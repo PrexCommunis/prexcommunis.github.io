@@ -8,7 +8,7 @@ const officeIcons = {
     morning: '🌅',
     midday: '☀️',
     evening: '🕯️',
-    compline: '🌙'
+    compline: '🦉'
 };
 
 const officeLabels = {

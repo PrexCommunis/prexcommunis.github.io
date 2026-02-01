@@ -6,7 +6,7 @@ const offices = [
     { id: 'morning', label: 'Morning Prayer', icon: '🌅' },
     { id: 'midday', label: 'Midday Prayer', icon: '☀️' },
     { id: 'evening', label: 'Evening Prayer', icon: '🕯️' },
-    { id: 'compline', label: 'Compline', icon: '🌙' },
+    { id: 'compline', label: 'Compline', icon: '🦉' },
     { id: 'lectionary', label: 'Lectionary', icon: '📖' },
 ];
 
