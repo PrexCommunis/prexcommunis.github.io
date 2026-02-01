@@ -10,7 +10,7 @@ export default function Opening({ sentence }) {
 
             {sentence && (
                 <p className="prayer-text">
-                    {sentence.text} <span className="rubric">{sentence.reference}</span>
+                    {sentence.text} <span className="rubric">{sentence.citation}</span>
                 </p>
             )}
 
@@ -41,6 +41,6 @@ export default function Opening({ sentence }) {
             <p className="prayer-text response">
                 {officeContent.prayers.lordsPrayer}
             </p>
-        </div>
+        </div >
     );
 }
