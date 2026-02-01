@@ -102,3 +102,5 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 
 **Original App Designed by [@euxaristia](https://github.com/euxaristia)**
 **Refactored & Modernized with [Antigravity](https://gemini.google.com)**
+
+Made in 🇨🇦 with ❤️ for 🇬🇧 🇺🇸 & 🌎

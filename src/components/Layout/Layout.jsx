@@ -29,6 +29,8 @@ export default function Layout({ children }) {
                         <p>
                             Based on the Book of Common Prayer | App designed by{' '}
                             <a href="https://github.com/euxaristia" target="_blank" rel="noopener noreferrer">@euxaristia</a>
+                            <br />
+                            Made in 🇨🇦 with ❤️ for 🇬🇧 🇺🇸 & 🌎
                         </p>
                     </footer>
                 </div>
