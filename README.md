@@ -1,6 +1,6 @@
 # Common Prayer
 
-Reference the [Book of Common Prayer](https://www.churchofengland.org/prayer-and-worship/join-us-in-daily-prayer/morning-prayer-contemporary-tuesday-23-july-2024) (1662 International Edition) for the traditional texts used in this application.
+Reference the Book of Common Prayer (1662 International Edition) for the traditional texts used in this application.
 
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green)](#)
