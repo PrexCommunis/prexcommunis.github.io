@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg', 'robots.txt'], // Add other assets if valid
+      includeAssets: ['icon.svg', 'robots.txt'], 
       manifest: {
         name: 'Common Prayer - Daily Office',
         short_name: 'Common Prayer',
@@ -20,9 +20,11 @@ export default defineConfig({
         background_color: '#f4f1e8',
         display: 'standalone',
         orientation: 'portrait',
+        start_url: '.',
+        scope: '.',
         icons: [
           {
-            src: 'icon.svg', // Will be resolved correctly by Vite
+            src: 'icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any maskable'
