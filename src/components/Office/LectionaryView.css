@@ -169,7 +169,7 @@
 }
 
 .collect-title::before {
-    content: '▶';
+    content: '►';
     font-size: 0.8rem;
     margin-right: 0.5rem;
     color: var(--text-color);
