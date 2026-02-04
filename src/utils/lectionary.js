@@ -40,7 +40,7 @@ export const lectionary = {
     1: { morning: { first: "Genesis 46:26-47:13", second: "Matthew 18:1-21" }, evening: { first: "Genesis 47:13-31", second: "Acts 19:21-41" } },
     2: { morning: { first: "Exodus 13:1-17", second: "Matthew 18:21-19:3" }, evening: { first: "Haggai 2:1-10", second: "Acts 20:1-17" } },
     3: { morning: { first: "Genesis 48", second: "Matthew 19:3-27" }, evening: { first: "Genesis 49", second: "Acts 20:17-38" } },
-    4: { morning: { first: "Genesis 50", second: "Matthew 19:27-20:17" }, evening: { first: "Exodus 1", second: "Acts 21:1-17" } },
+    4: { morning: { first: "Genesis 50", second: "Matthew 19:27-20:16" }, evening: { first: "Exodus 1", second: "Acts 21:1-17" } },
     5: { morning: { first: "Exodus 2", second: "Matthew 20:17-34" }, evening: { first: "Exodus 3", second: "Acts 21:17-37" } },
     6: { morning: { first: "Exodus 4:1-24", second: "Matthew 21:1-23" }, evening: { first: "Exodus 4:27-5:15", second: "Acts 21:37-22:23" } },
     7: { morning: { first: "Exodus 5:15-6:14", second: "Matthew 21:23-46" }, evening: { first: "Exodus 6:28-7:14", second: "Acts 22:23-23:12" } },
