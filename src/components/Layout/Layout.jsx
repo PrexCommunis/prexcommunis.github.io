@@ -6,7 +6,18 @@ import ThemeToggle from '../Controls/ThemeToggle';
 import './Layout.css';
 
 export default function Layout({ children }) {
-    const { isSidebarOpen } = useApp();
+    const { isSidebarOpen, currentOffice } = useApp();
+
+    React.useEffect(() => {
+        const titles = {
+            morning: 'Morning Prayer',
+            midday: 'Midday Prayer',
+            evening: 'Evening Prayer',
+            compline: 'Compline',
+            lectionary: 'Lectionary'
+        };
+        document.title = titles[currentOffice] || 'Common Prayer';
+    }, [currentOffice]);
 
     return (
         <>
