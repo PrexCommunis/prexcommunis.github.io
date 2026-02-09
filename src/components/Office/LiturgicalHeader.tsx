@@ -1,6 +1,10 @@
-import React from 'react';
+import { LiturgicalInfo } from '../../types';
 
-export default function LiturgicalHeader({ info }) {
+interface LiturgicalHeaderProps {
+    info: LiturgicalInfo;
+}
+
+export default function LiturgicalHeader({ info }: LiturgicalHeaderProps) {
     if (!info) return null;
 
     const { weekInfo, saintDay } = info;

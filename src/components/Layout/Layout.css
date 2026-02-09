@@ -2,7 +2,7 @@
 /* This element handles the 'push' animation via padding */
 .layout-wrapper {
     min-height: 100vh;
-    transition: padding-left var(--sidebar-transition);
+    transition: transform var(--sidebar-transition);
     padding-left: 0;
     position: relative;
     background-color: var(--primary-bg);
@@ -12,7 +12,7 @@
 /* Desktop: Push content when sidebar is open */
 @media (min-width: 768px) {
     .layout-wrapper.sidebar-open {
-        padding-left: var(--sidebar-width);
+        transform: translateX(var(--sidebar-width));
     }
 }
 
@@ -23,7 +23,6 @@
     margin: 0 auto;
     padding: 20px;
     width: 100%;
-    transition: max-width 0.3s ease;
 }
 
 /* Responsive adjustments for larger screens */

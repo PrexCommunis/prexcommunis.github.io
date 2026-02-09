@@ -1,6 +1,12 @@
 import React from 'react';
+import { Canticle as CanticleType } from '../../../types';
 
-export default function Canticle({ name, content }) {
+interface CanticleProps {
+    name?: string;
+    content: CanticleType | null;
+}
+
+export default function Canticle({ content }: CanticleProps) {
     if (!content) {
         return (
             <div className="section">

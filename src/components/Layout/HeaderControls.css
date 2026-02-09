@@ -45,32 +45,3 @@
 .control-btn:active {
     transform: scale(0.95);
 }
-
-/* Office Switch specifics */
-.office-switch-btn {
-    grid-template-columns: auto 1fr;
-    width: auto;
-    /* Allow growth */
-    min-width: 40px;
-    padding: 0 10px;
-    /* Reduced padding */
-    gap: 8px;
-}
-
-.office-switch-text {
-    display: none;
-    white-space: nowrap;
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-}
-
-/* Desktop: Show text */
-@media (min-width: 768px) {
-    .office-switch-btn {
-        padding: 0 16px;
-    }
-
-    .office-switch-text {
-        display: block;
-    }
-}

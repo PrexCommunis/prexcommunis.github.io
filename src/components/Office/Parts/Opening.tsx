@@ -1,7 +1,11 @@
-import React from 'react';
 import { officeContent } from '../../../data/officeContent';
+import { Sentence } from '../../../types';
 
-export default function Opening({ sentence }) {
+interface OpeningProps {
+    sentence: Sentence;
+}
+
+export default function Opening({ sentence }: OpeningProps) {
     return (
         <div className="section">
             <p className="rubric">

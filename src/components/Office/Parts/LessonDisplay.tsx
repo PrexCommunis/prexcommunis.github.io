@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchBibleText, formatVerseText } from '../../../utils/api';
 import { formatLessonIntro } from '../../../utils/lectionary';
+import { BibleVerse } from '../../../types';
 
-export default function LessonDisplay({ reference, lesson }) {
-    const [verses, setVerses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+interface LessonDisplayProps {
+    reference: string | null;
+    lesson: 'first' | 'second';
+}
+
+export default function LessonDisplay({ reference, lesson }: LessonDisplayProps) {
+    const [verses, setVerses] = useState<BibleVerse[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function loadLesson() {
@@ -25,7 +31,7 @@ export default function LessonDisplay({ reference, lesson }) {
                 } else {
                     setError('No data received');
                 }
-            } catch (err) {
+            } catch (err: any) {
                 console.error('Error loading lesson:', err);
                 setError(`Could not load lesson: ${err.message}`);
             } finally {
@@ -41,6 +47,7 @@ export default function LessonDisplay({ reference, lesson }) {
         setError(null);
 
         const load = async () => {
+            if (!reference) return;
             try {
                 const data = await fetchBibleText(reference);
                 if (data) {
@@ -48,7 +55,7 @@ export default function LessonDisplay({ reference, lesson }) {
                 } else {
                     setError('No data received');
                 }
-            } catch (err) {
+            } catch (err: any) {
                 setError(`Could not load lesson: ${err.message}`);
             } finally {
                 setLoading(false);

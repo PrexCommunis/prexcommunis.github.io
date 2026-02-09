@@ -8,7 +8,7 @@ import MiddayPrayer from './MiddayPrayer';
 import Compline from './Compline';
 import LectionaryView from './LectionaryView';
 
-export default function OfficeView() {
+const OfficeView: React.FC = () => {
     const { currentOffice } = useApp();
     const data = useLiturgicalData();
 
@@ -27,4 +27,6 @@ export default function OfficeView() {
             {currentOffice === 'lectionary' && <LectionaryView />}
         </div>
     );
-}
+};
+
+export default OfficeView;

@@ -5,12 +5,20 @@ import { getPsalmReferences, getPsalmLatinTitle } from '../../utils/psalms';
 import { getCollectForDate } from '../../utils/collects';
 import LessonDisplay from './Parts/LessonDisplay';
 import { Calendar } from 'lucide-react';
+import { LiturgicalInfo, LectionaryDay, PsalmEntry } from '../../types';
 import './LectionaryView.css';
+
+interface LectionaryDataState {
+    info: LiturgicalInfo;
+    readings: LectionaryDay | null;
+    psalms: PsalmEntry[];
+    collect: string | null;
+    dateObj: Date;
+}
 
 export default function LectionaryView() {
     // Initialize with today's date
-    // Initialize with today's date
-    const [selectedDate, setSelectedDate] = useState(() => {
+    const [selectedDate, setSelectedDate] = useState<string>(() => {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -18,8 +26,8 @@ export default function LectionaryView() {
         return `${year}-${month}-${day}`;
     });
 
-    const [activeTab, setActiveTab] = useState('morning'); // 'morning' or 'evening'
-    const [data, setData] = useState(null);
+    const [activeTab, setActiveTab] = useState<'morning' | 'evening'>('morning');
+    const [data, setData] = useState<LectionaryDataState | null>(null);
 
     useEffect(() => {
         const [year, month, day] = selectedDate.split('-').map(Number);
@@ -39,11 +47,11 @@ export default function LectionaryView() {
         });
     }, [selectedDate, activeTab]);
 
-    const handleDateChange = (e) => {
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedDate(e.target.value);
     };
 
-    const changeDate = (days) => {
+    const changeDate = (days: number) => {
         const [year, month, day] = selectedDate.split('-').map(Number);
         const dateObj = new Date(year, month - 1, day);
         dateObj.setDate(dateObj.getDate() + days);

@@ -1,8 +1,10 @@
+import { Lectionary, LectionaryDay } from '../types';
+
 // 1662 Book of Common Prayer Daily Office Lectionary
 // Source: https://github.com/spagosx/1662-BCP-Lectionary
 // Each day has morning and evening readings, each with a first (usually OT) and second (NT) lesson
 
-export const lectionary = {
+export const lectionary: Lectionary = {
   1: { // January
     1: { morning: { first: "Genesis 17:19-27", second: "Romans 2:17-29" }, evening: { first: "Deuteronomy 10:12-22", second: "Colossians 2:8-18" } },
     2: { morning: { first: "Genesis 1:1-20", second: "Matthew 1:18-25" }, evening: { first: "Genesis 1:20-2:4", second: "Acts 1" } },
@@ -396,7 +398,7 @@ export const lectionary = {
 };
 
 // Helper function to get today's readings
-export function getTodaysReadings() {
+export function getTodaysReadings(): LectionaryDay | null {
   const now = new Date();
   const month = now.getMonth() + 1; // JavaScript months are 0-indexed
   const day = now.getDate();
@@ -405,11 +407,10 @@ export function getTodaysReadings() {
     return lectionary[month][day];
   }
   return null;
-  return null;
 }
 
 // Helper function to get readings for a specific date
-export function getReadingsForDate(date) {
+export function getReadingsForDate(date: Date): LectionaryDay | null {
   const month = date.getMonth() + 1; // JavaScript months are 0-indexed
   const day = date.getDate();
 
@@ -420,8 +421,7 @@ export function getReadingsForDate(date) {
 }
 
 // Helper function to parse a Bible reference
-// Helper function to parse a Bible reference
-export function parseReference(ref) {
+export function parseReference(ref: string): { book: string; chapter: number; verseStart: number } | null {
   // Handle complex references like "Genesis 46:26-47:13" or simple "Acts 1"
   // We only really need the start chapter/verse for the intro text.
   const match = ref.match(/^(.+?)\s+(\d+)(?::(\d+))?.*$/);
@@ -437,7 +437,7 @@ export function parseReference(ref) {
 }
 
 // Format introduction for a lesson
-export function formatLessonIntro(ref, lessonNumber) {
+export function formatLessonIntro(ref: string, lessonNumber: 'first' | 'second'): string {
   const parsed = parseReference(ref);
   if (!parsed) return `The ${lessonNumber} Lesson`;
 
@@ -447,7 +447,7 @@ export function formatLessonIntro(ref, lessonNumber) {
 }
 
 // Get ordinal suffix (1st, 2nd, 3rd, etc.)
-export function getOrdinalSuffix(n) {
+export function getOrdinalSuffix(n: number): string {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;
   return (s[(v - 20) % 10] || s[v] || s[0]);

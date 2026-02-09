@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchBibleText, formatVerseText } from '../../../utils/api';
 import { getPsalmLatinTitle } from '../../../utils/psalms';
+import { PsalmEntry, BibleVerse } from '../../../types';
 
-function PsalmDisplay({ psalm }) {
-    const [verses, setVerses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+interface PsalmDisplayProps {
+    psalm: PsalmEntry;
+}
 
-    // Determines the display title (e.g., "Psalm 121" or "Psalm 119:105-112")
-    const displayTitle = typeof psalm === 'object' ? `Psalm ${psalm.number}` : `Psalm ${psalm}`;
-    const reference = typeof psalm === 'object' ? psalm.reference : `Psalm ${psalm}`;
-    const psalmNumber = typeof psalm === 'object' ? psalm.number : psalm;
+function PsalmDisplay({ psalm }: PsalmDisplayProps) {
+    const [verses, setVerses] = useState<BibleVerse[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Latin title is only for the whole Psalm usually, but let's show it if available.
-    // If it's a section of 119, we might handle it differently, but getPsalmLatinTitle(119) works.
+    const displayTitle = psalm.title;
+    const reference = psalm.reference;
+    const psalmNumber = psalm.number;
+
     const latinTitle = getPsalmLatinTitle(psalmNumber);
 
     useEffect(() => {
@@ -21,8 +23,7 @@ function PsalmDisplay({ psalm }) {
             setLoading(true);
             try {
                 // Use the API reference (e.g. "Psalm 121" or "Psalm 119:1-32")
-                // If it's an object from getPsalmReferences, it has an .apiRef property which is perfect.
-                const apiRef = typeof psalm === 'object' && psalm.apiRef ? psalm.apiRef : reference;
+                const apiRef = psalm.apiRef;
 
                 const data = await fetchBibleText(apiRef);
                 if (data) {
@@ -67,7 +68,11 @@ function PsalmDisplay({ psalm }) {
     );
 }
 
-export default function Psalter({ psalms }) {
+interface PsalterProps {
+    psalms: PsalmEntry[];
+}
+
+export default function Psalter({ psalms }: PsalterProps) {
     if (!psalms || psalms.length === 0) {
         return (
             <div className="psalter">

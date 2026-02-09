@@ -1,7 +1,11 @@
-import React from 'react';
 import { officeContent } from '../../../data/officeContent';
 
-export default function Prayers({ collect, office }) {
+interface PrayersProps {
+    collect: string | null;
+    office: 'morning' | 'evening';
+}
+
+export default function Prayers({ collect, office }: PrayersProps) {
     const { suffrages, statePrayers, stChrysostom, grace } = officeContent.prayers;
 
     return (

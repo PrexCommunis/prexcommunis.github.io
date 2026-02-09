@@ -1,8 +1,9 @@
 // BCP Collects organized by liturgical season
 // Each collect includes morning and evening versions where they differ
 import { getLiturgicalInfo } from './liturgicalCalendar';
+import { Collect, Collects } from '../types';
 
-export const collects = {
+export const collects: Collects = {
   advent: {
     1: {
       text: "Almighty God, give us grace that we may cast away the works of darkness, and put upon us the armour of light, now in the time of this mortal life in which thy Son Jesus Christ came to visit us in great humility; that in the last day, when he shall come again in his glorious majesty to judge both the quick and the dead, we may rise to the life immortal; through him who liveth and reigneth with thee and the Holy Ghost, now and ever. Amen."
@@ -198,7 +199,7 @@ export const collects = {
 };
 
 // Function to get the collect for a specific date
-export function getCollectForDate(date) {
+export function getCollectForDate(date: Date): string | null {
   const liturgicalInfo = getLiturgicalInfo(date);
 
   if (!liturgicalInfo) return null;
@@ -219,58 +220,70 @@ export function getCollectForDate(date) {
   if (weekInfo.includes("Advent")) {
     const match = weekInfo.match(/(\d+)/);
     const sundayNum = match ? parseInt(match[1]) : 1;
-    return collects.advent[sundayNum]?.text || getGeneralCollect("advent");
+    const group = collects.advent as Record<number, Collect>;
+    return group[sundayNum]?.text || getGeneralCollect("advent");
   }
 
   if (weekInfo.includes("Christmas Day")) {
-    return collects.christmastide.christmas.text;
+    const group = collects.christmastide as Record<string, Collect>;
+    return group.christmas.text;
   }
 
   if (weekInfo.includes("Epiphany")) {
+    const group = collects.epiphany as Record<string, Collect>;
     if (weekInfo.includes("the Epiphany")) {
-      return collects.epiphany.epiphanyDay.text;
+      return group.epiphanyDay.text;
     }
     const match = weekInfo.match(/(\d+)/);
     const sundayNum = match ? parseInt(match[1]) : 1;
-    return collects.epiphany[sundayNum]?.text || getGeneralCollect("epiphany");
+    // @ts-ignore
+    return group[sundayNum]?.text || getGeneralCollect("epiphany");
   }
 
   if (weekInfo.includes("Lent")) {
+    const group = collects.lent as Record<string, Collect>;
     if (weekInfo.includes("Ash Wednesday")) {
-      return collects.lent.ashWednesday.text;
+      return group.ashWednesday.text;
     }
     const match = weekInfo.match(/(\d+)/);
     const sundayNum = match ? parseInt(match[1]) : 1;
-    return collects.lent[sundayNum]?.text || getGeneralCollect("lent");
+    // @ts-ignore
+    return group[sundayNum]?.text || getGeneralCollect("lent");
   }
 
   if (weekInfo.includes("Easter")) {
+    const group = collects.easter as Record<string, Collect>;
     if (weekInfo.includes("Easter Day")) {
-      return collects.easter.easterDay.text;
+      return group.easterDay.text;
     }
     const match = weekInfo.match(/(\d+)/);
     const sundayNum = match ? parseInt(match[1]) : 1;
-    return collects.easter[sundayNum]?.text || getGeneralCollect("easter");
+    // @ts-ignore
+    return group[sundayNum]?.text || getGeneralCollect("easter");
   }
 
   if (weekInfo.includes("Pentecost")) {
-    return collects.pentecost.pentecost.text;
+      const group = collects.pentecost as Record<string, Collect>;
+    return group.pentecost.text;
   }
 
   if (weekInfo.includes("Trinity")) {
-    return collects.trinity.trinitySunday.text;
+      const group = collects.trinity as Record<string, Collect>;
+    return group.trinitySunday.text;
   }
 
   if (weekInfo.includes("after Trinity")) {
+      const group = collects.afterTrinity as Record<number, Collect>;
     const match = weekInfo.match(/(\d+)/);
     const sundayNum = match ? parseInt(match[1]) : 1;
-    return collects.afterTrinity[sundayNum]?.text || getGeneralCollect("afterTrinity");
+    return group[sundayNum]?.text || getGeneralCollect("afterTrinity");
   }
 
   if (season === "Pre-Lent" || weekInfo.includes("Septuagesima") || weekInfo.includes("Sexagesima") || weekInfo.includes("Quinquagesima")) {
-    if (weekInfo.includes("Septuagesima")) return collects.preLent.septuagesima.text;
-    if (weekInfo.includes("Sexagesima")) return collects.preLent.sexagesima.text;
-    if (weekInfo.includes("Quinquagesima")) return collects.preLent.quinquagesima.text;
+      const group = collects.preLent as Record<string, Collect>;
+    if (weekInfo.includes("Septuagesima")) return group.septuagesima.text;
+    if (weekInfo.includes("Sexagesima")) return group.sexagesima.text;
+    if (weekInfo.includes("Quinquagesima")) return group.quinquagesima.text;
     return getGeneralCollect("Pre-Lent");
   }
 
@@ -278,14 +291,13 @@ export function getCollectForDate(date) {
 }
 
 // Function to get the collect for today
-export function getTodaysCollect() {
+export function getTodaysCollect(): string | null {
   return getCollectForDate(new Date());
 }
 
 // General collect fallback
-// General collect fallback
-export function getGeneralCollect(season) {
-  const generalCollects = {
+export function getGeneralCollect(season: string): string {
+  const generalCollects: Record<string, string> = {
     "Advent": "Almighty God, give us grace that we may cast away the works of darkness, and put upon us the armour of light. Amen.",
     "Christmastide": "O God, who makest us glad with the yearly remembrance of the birth of thine only Son. Amen.",
     "Epiphany": "O Lord, we beseech thee mercifully to receive the prayers of thy people. Amen.",
@@ -301,7 +313,7 @@ export function getGeneralCollect(season) {
 }
 
 // Cache collects for performance
-function cacheTodaysCollect() {
+export function cacheTodaysCollect() {
   const cacheKey = 'collect-cache-' + new Date().toDateString();
   const cached = localStorage.getItem(cacheKey);
 

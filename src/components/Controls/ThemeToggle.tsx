@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import './ThemeToggle.css';

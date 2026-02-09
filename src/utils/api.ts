@@ -1,10 +1,12 @@
+import { BibleApiResponse, BibleVerse } from '../types';
+
 // API Utilities
 
 // Fetch Bible text from bible-api.com (KJV)
 // Helper for delay
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function fetchBibleText(reference, retries = 3, backoff = 500) {
+export async function fetchBibleText(reference: string, retries: number = 3, backoff: number = 500): Promise<BibleApiResponse> {
     // bible-api.com expects references like "Genesis+1:1-20"
     const encodedRef = encodeURIComponent(reference);
     const url = `https://bible-api.com/${encodedRef}?translation=kjv`;
@@ -40,10 +42,11 @@ export async function fetchBibleText(reference, retries = 3, backoff = 500) {
             await delay(waitTime);
         }
     }
+    throw new Error("Failed to fetch Bible text after retries");
 }
 
 // Format verse text from API response
-export function formatVerseText(apiResponse) {
+export function formatVerseText(apiResponse: BibleApiResponse): BibleVerse[] {
     if (!apiResponse || !apiResponse.verses) {
         // Some responses might be different? usually bible-api returns { verses: [...] }
         return [];

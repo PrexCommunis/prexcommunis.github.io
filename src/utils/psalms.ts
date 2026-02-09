@@ -1,13 +1,18 @@
+import { PsalmEntry } from '../types';
+
 // 30-Day Psalm Cycle for the Book of Common Prayer
 // The Psalter is read through once each month at Morning and Evening Prayer
 
-const psalmCycle = {
+interface PsalmCycle {
+  [day: number]: {
+    morning: number[];
+    evening: number[];
+  };
+}
+
+const psalmCycle: PsalmCycle = {
   1: { morning: [1, 2, 3, 4, 5], evening: [6, 7, 8] },
   2: { morning: [9, 10, 11], evening: [12, 13, 14] },
-  // ... (content remains same, just ensuring const is not exported directly if not needed, but typically we keep it internal or export if useful. Let's keep it internal unless needed)
-  // Wait, I should export helpers, not the raw data maybe? Or export both.
-  // Let's export helpers. The functions use psalmCycle internally.
-
   3: { morning: [15, 16, 17], evening: [18] },
   4: { morning: [19, 20, 21], evening: [22, 23] },
   5: { morning: [24, 25, 26], evening: [27, 28, 29] },
@@ -38,17 +43,10 @@ const psalmCycle = {
   30: { morning: [144, 145, 146], evening: [147, 148, 149, 150] }
 };
 
-// Special handling for Psalm 119 sections
-const psalm119Sections = {
-  1: { start: 1, end: 32 },
-  33: { start: 33, end: 72 },
-  73: { start: 73, end: 104 },
-  105: { start: 105, end: 144 },
-  145: { start: 145, end: 176 }
-};
+
 
 // Get psalms for a specific date
-export function getPsalmsForDate(office, date) {
+export function getPsalmsForDate(office: 'morning' | 'evening', date: Date): number[] | null {
   const dayOfMonth = date.getDate();
   // Day 31 uses day 30's psalms
   const cycleDay = dayOfMonth > 30 ? 30 : dayOfMonth;
@@ -60,12 +58,12 @@ export function getPsalmsForDate(office, date) {
 }
 
 // Get psalms for today's office
-export function getTodaysPsalms(office) {
+export function getTodaysPsalms(office: 'morning' | 'evening'): number[] | null {
   return getPsalmsForDate(office, new Date());
 }
 
 // Format psalm reference for API call
-function formatPsalmReference(psalmNum, startVerse, endVerse) {
+function formatPsalmReference(psalmNum: number, startVerse?: number, endVerse?: number): string {
   if (startVerse && endVerse) {
     return `Psalm ${psalmNum}:${startVerse}-${endVerse}`;
   }
@@ -73,11 +71,11 @@ function formatPsalmReference(psalmNum, startVerse, endVerse) {
 }
 
 // Get psalm references formatted for display and fetching
-export function getPsalmReferences(office, date = new Date()) {
+export function getPsalmReferences(office: 'morning' | 'evening', date: Date = new Date()): PsalmEntry[] {
   const psalms = getPsalmsForDate(office, date);
   if (!psalms) return [];
 
-  const references = [];
+  const references: PsalmEntry[] = [];
 
   for (let i = 0; i < psalms.length; i++) {
     const psalmNum = psalms[i];
@@ -108,7 +106,7 @@ export function getPsalmReferences(office, date = new Date()) {
 }
 
 // Get Latin title for psalm (traditional BCP style)
-const psalmLatinTitles = {
+const psalmLatinTitles: Record<number, string> = {
   1: "Beatus vir",
   2: "Quare fremuerunt gentes?",
   3: "Domine, quid multiplicati?",
@@ -261,6 +259,6 @@ const psalmLatinTitles = {
   150: "Laudate Dominum"
 };
 
-export function getPsalmLatinTitle(psalmNum) {
+export function getPsalmLatinTitle(psalmNum: number): string {
   return psalmLatinTitles[psalmNum] || "";
 }

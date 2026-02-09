@@ -1,4 +1,3 @@
-import React from 'react';
 import Opening from './Parts/Opening';
 import Invitatory from './Parts/Invitatory';
 import Psalter from './Parts/Psalter';
@@ -7,8 +6,13 @@ import Canticle from './Parts/Canticle';
 import Creed from './Parts/Creed';
 import Prayers from './Parts/Prayers';
 import { officeContent } from '../../data/officeContent';
+import { LiturgicalData } from '../../hooks/useLiturgicalData';
 
-export default function MorningPrayer({ data }) {
+interface MorningPrayerProps {
+    data: LiturgicalData;
+}
+
+export default function MorningPrayer({ data }: MorningPrayerProps) {
     const { readings, psalms, collect, sentence } = data;
 
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { officeContent } from '../../data/officeContent';
 
-export default function Compline() {
+const Compline: React.FC = () => {
     return (
         <div className="compline">
             <div className="section">
@@ -131,4 +131,6 @@ export default function Compline() {
             </div>
         </div>
     );
-}
+};
+
+export default Compline;

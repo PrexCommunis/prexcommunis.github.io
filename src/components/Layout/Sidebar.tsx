@@ -1,8 +1,13 @@
-import React from 'react';
-import { useApp } from '../../contexts/AppContext';
+import { useApp, OfficeType } from '../../contexts/AppContext';
 import './Sidebar.css';
 
-const offices = [
+interface SidebarOffice {
+    id: OfficeType;
+    label: string;
+    icon: string;
+}
+
+const offices: SidebarOffice[] = [
     { id: 'morning', label: 'Morning Prayer', icon: '🌅' },
     { id: 'midday', label: 'Midday Prayer', icon: '☀️' },
     { id: 'evening', label: 'Evening Prayer', icon: '🕯️' },
@@ -14,7 +19,7 @@ export default function Sidebar() {
     const { isSidebarOpen, closeSidebar, currentOffice, setCurrentOffice } = useApp();
 
     // Helper to handle navigation
-    const handleOfficeSelect = (officeId) => {
+    const handleOfficeSelect = (officeId: OfficeType) => {
         setCurrentOffice(officeId);
         closeSidebar();
     };

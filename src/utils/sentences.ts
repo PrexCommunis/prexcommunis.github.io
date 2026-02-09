@@ -1,7 +1,15 @@
+import { Sentence } from '../types';
+
 // BCP Sentences of Scripture
 // Provided for Morning Prayer, Evening Prayer, and other offices
 
-export const sentencesOfScripture = {
+interface SentenceData {
+  morning: Sentence[];
+  evening: Sentence[];
+  [key: string]: Sentence[]; // Allow other offices if needed in future
+}
+
+export const sentencesOfScripture: SentenceData = {
   morning: [
     {
       text: "Wherefore seeing we also are compassed about with so great a cloud of witnesses, let us lay aside every weight, and the sin which doth so easily beset us, and let us run with patience the race which is set before us, looking unto Jesus the author and finisher of our faith.",
@@ -89,19 +97,19 @@ export const sentencesOfScripture = {
 };
 
 // Get a random sentence for the given office
-export function getRandomSentence(office = 'morning') {
+export function getRandomSentence(office: 'morning' | 'evening' = 'morning'): Sentence {
   const sentences = sentencesOfScripture[office] || sentencesOfScripture.morning;
   const randomIndex = Math.floor(Math.random() * sentences.length);
   return sentences[randomIndex];
 }
 
 // Get the first sentence for the given office
-export function getFirstSentence(office = 'morning') {
+export function getFirstSentence(office: 'morning' | 'evening' = 'morning'): Sentence {
   const sentences = sentencesOfScripture[office] || sentencesOfScripture.morning;
   return sentences[0];
 }
 
 // Get all sentences for the given office
-export function getAllSentences(office = 'morning') {
+export function getAllSentences(office: 'morning' | 'evening' = 'morning'): Sentence[] {
   return sentencesOfScripture[office] || sentencesOfScripture.morning;
 }

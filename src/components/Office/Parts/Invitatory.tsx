@@ -1,7 +1,7 @@
 import React from 'react';
 import { officeContent } from '../../../data/officeContent';
 
-export default function Invitatory() {
+const Invitatory: React.FC = () => {
     const { preces, venite } = officeContent.invitatory;
 
     return (
@@ -52,4 +52,6 @@ export default function Invitatory() {
             </div>
         </>
     );
-}
+};
+
+export default Invitatory;

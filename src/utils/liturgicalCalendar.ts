@@ -1,7 +1,9 @@
+import { LiturgicalInfo } from '../types';
+
 // Liturgical Calendar Logic
 // Ported from legacy app.js
 
-const saintsCalendar = {
+const saintsCalendar: Record<string, string> = {
     "1-1": "The Circumcision of Christ",
     "1-6": "The Epiphany of our Lord Jesus Christ",
     "1-18": "The Confession of Saint Peter the Apostle",
@@ -39,7 +41,7 @@ const saintsCalendar = {
 };
 
 // Calculate Easter Sunday using Computus algorithm
-function calculateEaster(year) {
+function calculateEaster(year: number): Date {
     const a = year % 19;
     const b = Math.floor(year / 100);
     const c = year % 100;
@@ -58,28 +60,26 @@ function calculateEaster(year) {
 }
 
 // Get days between two dates
-function daysBetween(date1, date2) {
+function daysBetween(date1: Date, date2: Date): number {
     const oneDay = 24 * 60 * 60 * 1000;
-    return Math.floor((date2 - date1) / oneDay);
+    return Math.floor((date2.getTime() - date1.getTime()) / oneDay);
 }
 
 // Get the Sunday reference based on current day
-function getSundayReference(date, referenceDate, sundayName) {
+function getSundayReference(date: Date, sundayName: string): string {
     const dayOfWeek = date.getDay();
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     if (dayOfWeek === 0) {
         return sundayName;
     } else {
-        // If referenceDate is null, we can't say "after [Date]" easily with this function, 
-        // but the logic below passes string as SundayName.
         // Logic: "Monday after The First Sunday..."
         return `${daysOfWeek[dayOfWeek]} after ${sundayName}`;
     }
 }
 
 // Get Sunday number in a season
-function getSundayNumber(seasonStart, currentDate, seasonEnd) {
+function getSundayNumber(seasonStart: Date, currentDate: Date, seasonEnd: Date): number {
     let sundayCount = 0;
     let checkDate = new Date(seasonStart);
 
@@ -99,23 +99,10 @@ function getSundayNumber(seasonStart, currentDate, seasonEnd) {
     return sundayCount;
 }
 
-// Get number of Sundays between two dates
-function getSundaysBetween(startDate, endDate) {
-    let count = 0;
-    let checkDate = new Date(startDate);
 
-    while (checkDate < endDate) {
-        if (checkDate.getDay() === 0) {
-            count++;
-        }
-        checkDate.setDate(checkDate.getDate() + 1);
-    }
-
-    return count;
-}
 
 // Get first Sunday of Advent
-function getAdventStart(year) {
+function getAdventStart(year: number): Date {
     const christmas = new Date(year, 11, 25);
     const daysUntilSunday = christmas.getDay() === 0 ? 7 : christmas.getDay();
     const advent4 = new Date(christmas);
@@ -126,7 +113,7 @@ function getAdventStart(year) {
 }
 
 // Get Baptism of the Lord (first Sunday after January 6)
-function getBaptismOfLord(year) {
+function getBaptismOfLord(year: number): Date {
     const epiphany = new Date(year, 0, 6);
     const baptism = new Date(epiphany);
 
@@ -138,7 +125,7 @@ function getBaptismOfLord(year) {
 }
 
 // Get ordinal number string
-function getOrdinal(num) {
+function getOrdinal(num: number): string {
     const ordinals = ["", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth",
         "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth",
         "Eighteenth", "Nineteenth", "Twentieth", "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth"];
@@ -146,7 +133,7 @@ function getOrdinal(num) {
 }
 
 // Get liturgical season information
-export function getLiturgicalInfo(date) {
+export function getLiturgicalInfo(date: Date): LiturgicalInfo {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -179,13 +166,13 @@ export function getLiturgicalInfo(date) {
         season = "Advent";
         const sundaysBefore = Math.floor(daysBetween(adventStart, date) / 7);
         const adventWeek = Math.min(sundaysBefore + 1, 4);
-        weekInfo = getSundayReference(date, adventStart, `the ${getOrdinal(adventWeek)} Sunday of Advent`);
+        weekInfo = getSundayReference(date, `the ${getOrdinal(adventWeek)} Sunday of Advent`);
     } else if (date >= christmasDay && date < epiphany) {
         season = "Christmastide";
         if (month === 12 && day === 25) {
             weekInfo = "Christmas Day";
         } else {
-            weekInfo = getSundayReference(date, christmasDay, "Christmas Day");
+            weekInfo = getSundayReference(date, "Christmas Day");
         }
     } else if (date >= epiphany && date < septuagesima) {
         season = "Epiphany";
@@ -193,12 +180,12 @@ export function getLiturgicalInfo(date) {
             season = "after Epiphany";
             const currentSunday = getSundayNumber(baptismOfLord, date, septuagesima);
             if (currentSunday > 0) {
-                weekInfo = getSundayReference(date, null, `the ${getOrdinal(currentSunday)} Sunday after Epiphany`);
+                weekInfo = getSundayReference(date, `the ${getOrdinal(currentSunday)} Sunday after Epiphany`);
             } else {
-                weekInfo = getSundayReference(date, baptismOfLord, "the Baptism of Our Lord");
+                weekInfo = getSundayReference(date, "the Baptism of Our Lord");
             }
         } else {
-            weekInfo = getSundayReference(date, epiphany, "the Epiphany");
+            weekInfo = getSundayReference(date, "the Epiphany");
         }
     } else if (date >= septuagesima && date < ashWednesday) {
         season = "Pre-Lent";
@@ -206,11 +193,11 @@ export function getLiturgicalInfo(date) {
         const weeksFromSept = Math.floor(daysFromSept / 7);
 
         if (weeksFromSept === 0) {
-            weekInfo = getSundayReference(date, septuagesima, "Septuagesima Sunday");
+            weekInfo = getSundayReference(date, "Septuagesima Sunday");
         } else if (weeksFromSept === 1) {
-            weekInfo = getSundayReference(date, null, "Sexagesima Sunday");
+            weekInfo = getSundayReference(date, "Sexagesima Sunday");
         } else {
-            weekInfo = getSundayReference(date, null, "Quinquagesima Sunday");
+            weekInfo = getSundayReference(date, "Quinquagesima Sunday");
         }
     } else if (date >= ashWednesday && date < easter) {
         season = "Lent";
@@ -218,7 +205,7 @@ export function getLiturgicalInfo(date) {
             weekInfo = "Ash Wednesday";
         } else {
             const sundaysBefore = getSundayNumber(ashWednesday, date, easter);
-            weekInfo = getSundayReference(date, ashWednesday, `the ${getOrdinal(sundaysBefore)} Sunday in Lent`);
+            weekInfo = getSundayReference(date, `the ${getOrdinal(sundaysBefore)} Sunday in Lent`);
         }
     } else if (date >= easter && date < pentecost) {
         season = "Eastertide";
@@ -226,7 +213,7 @@ export function getLiturgicalInfo(date) {
             weekInfo = "Easter Day";
         } else {
             const sundaysBefore = Math.floor(daysBetween(easter, date) / 7);
-            weekInfo = getSundayReference(date, easter, `the ${getOrdinal(sundaysBefore + 1)} Sunday of Easter`);
+            weekInfo = getSundayReference(date, `the ${getOrdinal(sundaysBefore + 1)} Sunday of Easter`);
         }
     } else if (date >= pentecost && date < trinitySunday) {
         season = "Pentecost";
@@ -236,7 +223,7 @@ export function getLiturgicalInfo(date) {
         // Check if we're past this year's Advent
         if (date < getAdventStart(year)) {
             const sundayNumber = getSundayNumber(trinitySunday, date, getAdventStart(year));
-            weekInfo = getSundayReference(date, trinitySunday, `the ${getOrdinal(sundayNumber)} Sunday after Trinity`);
+            weekInfo = getSundayReference(date, `the ${getOrdinal(sundayNumber)} Sunday after Trinity`);
         } else {
             // We're in next year's Advent season (unlikely in this block logic order unless adventStart logic loop)
             // Actually the first IF block handles ADVENT of CURRENT YEAR.
@@ -301,14 +288,14 @@ export function getLiturgicalInfo(date) {
     // FIX for Jan 1-5 (Christmastide continues until Epiphany)
     if (month === 1 && day < 6) {
         season = "Christmastide";
-        weekInfo = getSundayReference(date, new Date(year - 1, 11, 25), "Christmas Day"); // Reference to last year's Christmas
+        weekInfo = getSundayReference(date, "Christmas Day"); // Reference to last year's Christmas
     }
 
     return { season, weekInfo, saintDay };
 }
 
 // Get the appropriate office for the current time
-export function getOfficeForTime(date = new Date()) {
+export function getOfficeForTime(date: Date = new Date()): 'morning' | 'midday' | 'evening' | 'compline' {
     const hour = date.getHours();
 
     // Mapping based on typical monastic/Anglican schedule:

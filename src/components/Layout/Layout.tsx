@@ -5,10 +5,10 @@ import HeaderControls from './HeaderControls';
 import ThemeToggle from '../Controls/ThemeToggle';
 import './Layout.css';
 
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
     const { isSidebarOpen, currentOffice } = useApp();
 
-    const titles = {
+    const titles: Record<string, string> = {
         morning: 'Morning Prayer',
         midday: 'Midday Prayer',
         evening: 'Evening Prayer',
@@ -16,8 +16,18 @@ export default function Layout({ children }) {
         lectionary: 'Lectionary'
     };
 
+    const isMounted = React.useRef(false);
+
     React.useEffect(() => {
         document.title = titles[currentOffice] || 'Common Prayer';
+
+        // Skip scroll on initial mount (allow browser restoration)
+        // Only scroll when office changes interactions
+        if (isMounted.current) {
+            window.scrollTo(0, 0);
+        } else {
+            isMounted.current = true;
+        }
     }, [currentOffice]);
 
     return (

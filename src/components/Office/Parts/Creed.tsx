@@ -1,7 +1,7 @@
 import React from 'react';
 import { officeContent } from '../../../data/officeContent';
 
-export default function Creed() {
+const Creed: React.FC = () => {
     return (
         <div className="section">
             <p className="rubric">
@@ -13,4 +13,6 @@ export default function Creed() {
             </p>
         </div>
     );
-}
+};
+
+export default Creed;

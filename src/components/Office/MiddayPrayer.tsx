@@ -1,6 +1,7 @@
 import React from 'react';
+import { officeContent } from '../../data/officeContent';
 
-export default function MiddayPrayer() {
+const MiddayPrayer: React.FC = () => {
     return (
         <div className="midday-prayer">
             <div className="section">
@@ -57,10 +58,7 @@ export default function MiddayPrayer() {
                 </p>
 
                 <p className="prayer-text response">
-                    Our Father who art in heaven, Hallowed be thy Name, Thy kingdom come, Thy will be done, on
-                    earth as it is in heaven. Give us this day our daily bread; And forgive us our trespasses, As
-                    we forgive them that trespass against us; And lead us not into temptation, But deliver us from
-                    evil. Amen.
+                    {officeContent.prayers.lordsPrayer}
                 </p>
 
                 <h3 className="collect-title">The Collect</h3>
@@ -76,4 +74,6 @@ export default function MiddayPrayer() {
             </div>
         </div>
     );
-}
+};
+
+export default MiddayPrayer;
