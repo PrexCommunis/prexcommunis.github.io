@@ -71,7 +71,7 @@ export const sentencesOfScripture: SentenceData = {
     },
     {
       text: "O come, let us adore him, Christ the Lord.",
-      citation: "Psalm 95:6"
+      citation: "From the hymn Adeste Fideles"
     },
     {
       text: "The heavens declare the glory of God; and the firmament sheweth his handywork.",
