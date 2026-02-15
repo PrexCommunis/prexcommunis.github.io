@@ -2,7 +2,7 @@
 
 Reference the Book of Common Prayer (1662 Edition) for the traditional texts used in this application.
 
-[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![License](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green)](#)
 [![Tauri](https://img.shields.io/badge/Tauri-Linux-orange)](https://tauri.app)
 
@@ -57,11 +57,11 @@ This project has been migrated from vanilla JavaScript to a modern stack:
    ```
 2. **Install**:
    ```bash
-   npm install
+   bun install
    ```
 3. **Run**:
    ```bash
-   npm run dev
+   bun run dev
    ```
 
 ### Native Linux Build
@@ -69,7 +69,7 @@ Pre-requisites: Rust, Cargo, and Linux dev libraries (`webkit2gtk`, etc.).
 
 1. **Build App**:
    ```bash
-   npm run tauri build
+   bun run tauri build
    ```
 2. **Output**:
    - **Debian/Ubuntu**: `src-tauri/target/release/bundle/deb/*.deb`
@@ -90,7 +90,7 @@ WEBKIT_DISABLE_COMPOSITING_MODE=1 ./src-tauri/target/release/app
 To deploy to GitHub Pages:
 
 ```bash
-npm run deploy
+bun run deploy
 ```
 
 *This builds the project to `/dist` and pushes it to the `gh-pages` branch.*
@@ -101,7 +101,7 @@ Contributions are welcome! Please submit issues or pull requests.
 
 ## License
 
-This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
