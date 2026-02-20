@@ -57,7 +57,7 @@ abstract class BuildTask : DefaultTask() {
             assetsDir.mkdirs()
             distDir.copyRecursively(assetsDir, overwrite = true)
             
-            // Also ensure a tauri.conf.json exists in assets with NO devUrl.
+            // Critical for Android to load local assets instead of trying localhost
             val assetConfig = File(assetsDir, "tauri.conf.json")
             assetConfig.writeText("{\"build\": {\"devUrl\": \"\"}}")
         }
@@ -67,13 +67,7 @@ abstract class BuildTask : DefaultTask() {
         tauriProps.writeText("tauri.android.devAddr=\n")
 
         // 4. Build Rust library
-        val ndkDir = findNdkDir()
-
-        if (ndkDir == null || !ndkDir.exists()) {
-            project.logger.warn("NDK not found, falling back to Tauri CLI")
-            runTauriCliFallback(workingDir)
-            return
-        }
+        val ndkDir = findNdkDir() ?: throw GradleException("NDK not found")
 
         val tTarget = target ?: "aarch64"
         val (cargoTarget, toolchainPrefix, abiFolder) = when (tTarget) {
@@ -90,49 +84,42 @@ abstract class BuildTask : DefaultTask() {
         val toolchainPath = File(ndkDir, "toolchains/llvm/prebuilt/$osName/bin")
         val exeSuffix = if (Os.isFamily(Os.FAMILY_WINDOWS)) ".cmd" else ""
         
-        // Linker for 32-bit ARM is a bit special in the NDK
         val linkerPrefix = if (tTarget == "arm" || tTarget == "armv7") "armv7a-linux-androideabi24" else "${toolchainPrefix}24"
-        var linker = File(toolchainPath, "${linkerPrefix}-clang$exeSuffix")
+        val linker = File(toolchainPath, "${linkerPrefix}-clang$exeSuffix")
 
-        if (!linker.exists()) {
-            project.logger.warn("Linker not found at ${linker.absolutePath}, trying without API level")
-            val fallbackLinker = File(toolchainPath, "${toolchainPrefix}-clang$exeSuffix")
-            if (fallbackLinker.exists()) {
-                linker = fallbackLinker
-            } else {
-                 project.logger.warn("Fallback linker also not found, falling back to Tauri CLI")
-                 runTauriCliFallback(workingDir)
-                 return
-            }
+        project.logger.lifecycle("Building Rust library for target $cargoTarget...")
+
+        // Temporarily modify tauri.conf.json to disable devUrl and beforeBuildCommand during compilation
+        val configFile = File(workingDir, "tauri.conf.json")
+        val originalConfig = if (configFile.exists()) configFile.readText() else null
+        
+        if (originalConfig != null) {
+            val modifiedConfig = originalConfig
+                .replace(Regex("\"devUrl\"\\s*:\\s*\"[^\"]*\""), "\"devUrl\": \"\"")
+                .replace(Regex("\"beforeBuildCommand\"\\s*:\\s*\"[^\"]*\""), "\"beforeBuildCommand\": \"\"")
+            configFile.writeText(modifiedConfig)
         }
 
-        val ar = File(toolchainPath, "llvm-ar$exeSuffix")
-        val nm = File(toolchainPath, "llvm-nm$exeSuffix")
-
-        project.logger.lifecycle("Building Rust library for target $cargoTarget using NDK at ${ndkDir.absolutePath}...")
-
-        execOperations.exec {
-            workingDir(workingDir)
-            executable("cargo")
-            args("build")
-            if (release == true) args("--release")
-            args("--target", cargoTarget)
-            
-            val envTriple = cargoTarget.uppercase().replace("-", "_")
-            environment("CARGO_TARGET_${envTriple}_LINKER", linker.absolutePath)
-            environment("CC_${cargoTarget}", linker.absolutePath)
-            environment("CXX_${cargoTarget}", File(toolchainPath, "${linkerPrefix}-clang++$exeSuffix").absolutePath)
-            environment("AR_${cargoTarget}", ar.absolutePath)
-            environment("NM_${cargoTarget}", nm.absolutePath)
-            
-            environment("TAURI_PLATFORM", "android")
-            environment("TAURI_ARCH", tTarget)
-            environment("TAURI_FAMILY", "unix")
-            
-            environment("TAURI_CONFIG", "{\"build\":{\"devUrl\":null},\"app\":{\"windows\":[]}}")
-            environment("TAURI_ENV_RELEASE", if (release == true) "true" else "false")
-            environment("TAURI_ANDROID_DEV_ADDR", "")
-        }.assertNormalExitValue()
+        try {
+            execOperations.exec {
+                workingDir(workingDir)
+                executable("cargo")
+                args("build", "--verbose")
+                if (release == true) args("--release")
+                args("--target", cargoTarget)
+                
+                environment("CARGO_TARGET_${cargoTarget.uppercase().replace("-", "_")}_LINKER", linker.absolutePath)
+                environment("TAURI_PLATFORM", "android")
+                environment("TAURI_ARCH", tTarget)
+                environment("TAURI_FAMILY", "unix")
+                environment("TAURI_ENV_DEBUG", "false")
+                environment("TAURI_ENV_RELEASE", "true")
+            }.assertNormalExitValue()
+        } finally {
+            if (originalConfig != null) {
+                configFile.writeText(originalConfig)
+            }
+        }
 
         val profile = if (release == true) "release" else "debug"
         val builtLib = File(workingDir, "target/$cargoTarget/$profile/libapp_lib.so")
@@ -145,16 +132,9 @@ abstract class BuildTask : DefaultTask() {
         try {
             val android = project.extensions.findByName("android")
             if (android != null) {
-                val ndkDirProp = android.javaClass.methods.find { it.name == "getNdkDirectory" }
-                val ndkDir = ndkDirProp?.invoke(android) as? File
+                val getNdkDirectory = android.javaClass.getMethod("getNdkDirectory")
+                val ndkDir = getNdkDirectory.invoke(android) as? File
                 if (ndkDir != null && ndkDir.exists()) return ndkDir
-                
-                val ndkPathProp = android.javaClass.methods.find { it.name == "getNdkPath" }
-                val ndkPath = ndkPathProp?.invoke(android) as? String
-                if (ndkPath != null) {
-                    val f = File(ndkPath)
-                    if (f.exists()) return f
-                }
             }
         } catch (unused: Exception) {}
 
@@ -162,63 +142,6 @@ abstract class BuildTask : DefaultTask() {
             val f = File(path)
             if (f.exists()) return f
         }
-        System.getenv("ANDROID_NDK_ROOT")?.let { path ->
-            val f = File(path)
-            if (f.exists()) return f
-        }
-
-        val sdkDir = findSdkDir()
-        if (sdkDir != null) {
-            val ndkFolder = File(sdkDir, "ndk")
-            if (ndkFolder.exists()) {
-                val versions = ndkFolder.listFiles()?.filter { it.isDirectory }?.sortedByDescending { it.name }
-                if (!versions.isNullOrEmpty()) return versions[0]
-            }
-        }
-
         return null
-    }
-
-    private fun findSdkDir(): File? {
-        System.getenv("ANDROID_HOME")?.let { path ->
-            val f = File(path)
-            if (f.exists()) return f
-        }
-        System.getenv("ANDROID_SDK_ROOT")?.let { path ->
-            val f = File(path)
-            if (f.exists()) return f
-        }
-        val localProps = File(project.rootDir, "local.properties")
-        if (localProps.exists()) {
-            val props = java.util.Properties()
-            localProps.inputStream().use { props.load(it) }
-            props.getProperty("sdk.dir")?.let { path ->
-                val f = File(path)
-                if (f.exists()) return f
-            }
-        }
-        return null
-    }
-
-    private fun runTauriCliFallback(workingDir: File) {
-        val attempts = listOf(listOf("npx", "tauri"), listOf("bunx", "tauri"))
-        for (attempt in attempts) {
-            try {
-                project.logger.lifecycle("Attempting fallback with ${attempt.joinToString(" ")}")
-                execOperations.exec {
-                    workingDir(workingDir)
-                    executable(attempt[0])
-                    args(attempt.drop(1) + listOf("android", "android-studio-script", "--target", target ?: "aarch64"))
-                    if (release == true) args("--release")
-                    environment("TAURI_ANDROID_DEV_ADDR", "")
-                    environment("TAURI_CONFIG", "{\"build\":{\"devUrl\":null}}")
-                    environment("TAURI_ENV_RELEASE", if (release == true) "true" else "false")
-                }.assertNormalExitValue()
-                return
-            } catch (e: Exception) {
-                project.logger.warn("Fallback ${attempt[0]} failed: ${e.message}")
-            }
-        }
-        throw GradleException("Failed to build Rust library. NDK not found and Tauri CLI fallback failed.")
     }
 }

@@ -70,6 +70,11 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    lint {
+        // Work around AGP/Kotlin lint analyzer crashes on this project.
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
 }
 
 kotlin {
