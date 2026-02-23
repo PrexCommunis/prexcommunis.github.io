@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const isMounted = React.useRef(false);
 
     React.useEffect(() => {
-        document.title = titles[currentOffice] || 'Common Prayer';
+        document.title = titles[currentOffice] || 'DearlyBeloved';
 
         // Skip scroll on initial mount (allow browser restoration)
         // Only scroll when office changes interactions
@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className={`layout-wrapper ${isSidebarOpen ? 'sidebar-open' : ''}`}>
                 <div className="app-container">
                     <header>
-                        <h1>Common Prayer</h1>
+                        <h1>DearlyBeloved</h1>
                         <p className="subtitle">The Daily Office</p>
                         <h2 className="office-title-display">{titles[currentOffice]}</h2>
                     </header>
@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                     <footer>
                         <p>
-                            Based on the Book of Common Prayer | App designed by{' '}
+                            Based on the 1662 Book of Common Prayer | App designed by{' '}
                             <a href="https://github.com/euxaristia" target="_blank" rel="noopener noreferrer">@euxaristia</a>
                             <br />
                             Made in 🇨🇦 with ❤️ for 🇬🇧 🇺🇸 & 🌎

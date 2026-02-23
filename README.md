@@ -1,4 +1,4 @@
-# Common Prayer
+# DearlyBeloved
 
 Reference the Book of Common Prayer (1662 Edition) for the traditional texts used in this application.
 
@@ -105,7 +105,7 @@ This project is licensed under the GNU Affero General Public License v3.0 - see 
 
 ## Acknowledgments
 
-- Based on the Book of Common Prayer (1662).
+- Based on the 1662 Book of Common Prayer.
 - Designed with reverence for the Anglican tradition.
 
 ---

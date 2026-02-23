@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Common Prayer",
+  "productName": "DearlyBeloved",
   "version": "0.1.0",
   "identifier": "com.dearlybeloved.app",
   "build": {
@@ -14,7 +14,7 @@
       {
         "label": "main",
         "url": "index.html",
-        "title": "Common Prayer",
+        "title": "DearlyBeloved",
         "width": 800,
         "height": 600,
         "resizable": true,

@@ -13,8 +13,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'robots.txt'], 
       manifest: {
-        name: 'Common Prayer - Daily Office',
-        short_name: 'Common Prayer',
+        name: 'DearlyBeloved - Daily Office',
+        short_name: 'DearlyBeloved',
         description: 'Daily Office prayers from the Book of Common Prayer',
         theme_color: '#8b6914',
         background_color: '#f4f1e8',
