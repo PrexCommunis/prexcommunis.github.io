@@ -1,7 +1,7 @@
 import { LiturgicalInfo } from '../types';
 
 // Liturgical Calendar Logic
-// Ported from legacy app.js
+// Ported from a previous app implementation.
 
 const saintsCalendar: Record<string, string> = {
     "1-1": "The Circumcision of Christ",
@@ -258,8 +258,8 @@ export function getLiturgicalInfo(date: Date): LiturgicalInfo {
             // If we are in Jan 2025, we need `christmasDay` of **2024** to correspond to the season.
 
             // FIXING THE LOGIC:
-            // The legacy code might have had a bug or assumed `year` context.
-            // Let's look at `getLiturgicalInfo` in legacy `app.js`.
+            // The previous code might have had a bug or assumed `year` context.
+            // Let's look at `getLiturgicalInfo` in the prior implementation.
             // It sets `year = date.getFullYear()`.
             // If I am in Jan, I need to check previous year's Christmas?
             // Or maybe the logic was simple:
@@ -268,14 +268,14 @@ export function getLiturgicalInfo(date: Date): LiturgicalInfo {
             // `trinitySunday` is ~May/June. `date >= trinitySunday` (Jan >= May) False.
             // So Jan 1-5 returns empty season?
 
-            // Let's re-read the legacy code carefully.
+            // Let's re-read the prior code carefully.
             // `const christmasDay = new Date(year, 11, 25);`
             // `const epiphany = new Date(year, 0, 6);`
             // `date >= christmasDay` (Jan >= Dec) -> False.
             // `date < epiphany` (Jan < Jan 6) -> True.
             // But it's `&&`. So False.
 
-            // This means Jan 1-5 was broken in legacy code? Or I copied it wrong?
+            // This means Jan 1-5 was broken in the prior code? Or I copied it wrong?
             // Let's check `app.js` again.
             // Line 1166: `date >= christmasDay && date < epiphany`.
             // Yes. It seems Jan 1-5 would fall through everything.

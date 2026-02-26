@@ -14,10 +14,7 @@
     transform: translateX(var(--sidebar-width));
 }
 
-/* On mobile, sidebar opens as overlay, but we might want buttons to move aside?
-   Legacy behavior: Mobile buttons DO move aside (slide right).
-   So the same logic applies.
-*/
+/* On mobile, sidebar opens as overlay, and controls still shift right with the sidebar. */
 
 /* Shared Control Button Styles */
 .control-btn {

@@ -20,7 +20,7 @@ export const officeContent: OfficeContent = {
         venite: {
             title: "Venite, Exultemus Domino",
             citation: "Psalm 95",
-            antiphon: "The Lord is glorious in his Saints: / O come, let us worship.", // TODO: This changes based on season? Legacy had static.
+            antiphon: "The Lord is glorious in his Saints: / O come, let us worship.", // TODO: This changes based on season? Currently static.
             text: `O Come, let us sing unto the Lord: / let us heartily rejoice in the strength of our salvation.
 Let us come before his presence with thanksgiving, / and show ourselves glad in him with psalms.
 For the Lord is a great God, / and a great King above all gods.

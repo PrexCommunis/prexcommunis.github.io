@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                     <footer>
                         <p>
-                            Based on the 1662 Book of Common Prayer | App designed by{' '}
+                            Based on 1662 BCP with 1549 Lectionary | App designed by{' '}
                             <a href="https://github.com/euxaristia" target="_blank" rel="noopener noreferrer">@euxaristia</a>
                             <br />
                             Made in 🇨🇦 with ❤️ for 🇬🇧 🇺🇸 & 🌎
